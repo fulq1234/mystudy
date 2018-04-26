@@ -6,9 +6,20 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.demo.entity.Dept;
+import org.hibernate.service.DeptBiz;
 import org.junit.Test;
 
 public class HibTest {
+	
+	@Test
+	public void testAddNew(){
+		Dept dept = new Dept();
+		dept.setDeptno((byte)10);
+		dept.setDname("研发部");
+		dept.setLoc("北京市海淀区");
+		
+		new DeptBiz().addNewDept(dept);
+	}
 	
 	@Test
 	public void firstShow(){
