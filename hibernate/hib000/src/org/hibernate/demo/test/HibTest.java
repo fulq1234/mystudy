@@ -1,5 +1,7 @@
 package org.hibernate.demo.test;
 
+import java.io.Serializable;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,17 +11,66 @@ import org.hibernate.demo.entity.Dept;
 import org.hibernate.service.DeptBiz;
 import org.junit.Test;
 
+/**
+ * Junit测试类
+ * @author Administrator
+ *
+ */
 public class HibTest {
 	
 	@Test
+	public void testDelete(){
+		new DeptBiz().delete((byte)1);
+	}
+	
+	@Test
+	public void testUpdate_2(){
+		Dept dept = new Dept();
+		dept.setDeptno((byte)11);
+		dept.setDname("新名称");
+		dept.setLoc("广新1");
+		
+		new DeptBiz().update(dept);
+	}
+	
+	/**
+	 * 测试更新
+	 */
+	@Test
+	public void testUpdate(){
+		Dept dept = new Dept();
+		dept.setDeptno((byte)11);
+		dept.setDname("新名称");
+		dept.setLoc("广新2");
+		
+		new DeptBiz().modifyDept(dept);
+	}
+	
+	@Test
+	public void testGet(){
+		Dept result = new DeptBiz().findById_get((byte)11);
+		System.out.println(result.getDname());
+	}
+	
+	@Test
+	public void testLoad(){
+		Dept result = new DeptBiz().findById_load((byte)11);
+		System.out.println(result.getDname());
+		
+	}
+	/**
+	 * 测试新增方法
+	 */
+	@Test
 	public void testAddNew(){
 		Dept dept = new Dept();
-		dept.setDeptno((byte)10);
-		dept.setDname("研发部");
-		dept.setLoc("北京市海淀区");
+		dept.setDeptno((byte)14);
+		dept.setDname("研发部14");
+		dept.setLoc("北京市海淀区14");
 		
 		new DeptBiz().addNewDept(dept);
 	}
+	
 	
 	@Test
 	public void firstShow(){

@@ -1,7 +1,7 @@
 package org.hibernate.demo.entity;
 
 public class Dept implements java.io.Serializable{
-	/*public Dept(){}*/
+	/*public Dpt(){}*/
 	private Byte deptno;
 	private String dname;
 	private String loc;

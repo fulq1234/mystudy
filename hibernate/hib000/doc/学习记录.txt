@@ -1,0 +1,41 @@
+<class name="cn.hibernatedemo.entity" table="`DEPT`">
+	<id name="" column="DEPTNO" type="java.lang.Byte">
+		<generator class="sequence">
+			<param name="sequence">SEQ_DEPTNO</param><!--具体哪个sequence-->
+		</generator>
+
+		<generator class="identity"></generator><!--MYSQL/SQL server-->
+		<generator class="increment"></generator><!--在数据库中查询最大值,加1-->
+		<generator class="native"></generator><!--根据方言自动选择-->
+
+		<generator class="assigned"></generator><!--根据程序赋主键值-->
+
+		<generator class="uuid"></genertor><!--根据实际情况生成一个32位的随机码-->
+	</id>
+	<property name="dname"></property>
+</class>
+
+
+get,load的区别
+1.从返回结果上对比：
+
+load方式检索不到的话会抛出org.hibernate.ObjectNotFoundException异常；
+get方法检索不到的话会返回null；
+
+2.从检索执行机制上对比：
+
+load方法的执行则比较复杂首先查找session的persistent Context（一级缓存）中是否有缓存，如果有则直接返回，如果没有则去查找二级缓存，如果有则返回，如果没有则判断是否是lazy，若不是lazy，直接访问数据库检索，查到记录返回（并且同时在二级缓存中存放查到的数据方便下次使用，若再下次使用时在二级缓存命中，就是查到数据，则有可能将数据放到
+一级缓存中。），查不到抛出异常。 若是lazy，则返回代理对象，而不到数据库中查找，除非使用此对象时，才到数据库中查找。
+get方法先到一级缓存，然后二级，最后db查找。
+
+dynamic-update:
+如果是开启了动态更新 那么你在commit之前select到的bean对象,这时再次set不同值进去
+然后commit,hibernat会自动判断如果新set的值有变化 那么会执行update操作，那么此时这个
+dynamic-update="true" 就表示只update有变化的项,而false默认是全部字段更新
+
+merge和update区别,merge的时候dynamic-update起作用。
+
+
+not-null="true": 检查空值
+
+
