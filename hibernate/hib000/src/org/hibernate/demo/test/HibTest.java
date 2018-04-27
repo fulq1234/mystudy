@@ -1,6 +1,6 @@
 package org.hibernate.demo.test;
 
-import java.io.Serializable;
+import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -8,7 +8,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.demo.entity.Dept;
+import org.hibernate.demo.entity.Emp;
 import org.hibernate.service.DeptBiz;
+import org.hibernate.service.EmpBiz;
 import org.junit.Test;
 
 /**
@@ -17,6 +19,38 @@ import org.junit.Test;
  *
  */
 public class HibTest {
+	
+	@Test
+	public void testQueryAllEmp(){
+		List<Emp> list= new EmpBiz().findAllEmp();
+		System.out.println(list.size());
+	}
+	
+	/**
+	 * saveOrUpdate游离态执行update方法。
+	 */
+	@Test
+	public void testSaveUpdate2(){
+		Emp emp = new Emp();
+		emp.setEmpNo(1);//这个给了个主键值，看着是和数据库中一个对象对应，其实session中没有它，这个时候调用saveOrUpdate时，执行update
+		emp.setEmpName("new Emp2");
+		
+		new EmpBiz().saveOrUpdate(emp);
+		
+	}
+	
+	/**
+	 * 对应临时对象，saveorUpdate方法执行保存操作
+	 * 执行前会出现一个select语句，是因为主键增长方式是increment，这个是从数据库中取出最大值,最大值+1就是所要的数据。
+	 */
+	@Test
+	public void testSaveUpdate(){
+		Emp emp = new Emp();
+		emp.setEmpName("new Emp");
+		
+		new EmpBiz().saveOrUpdate(emp);
+		
+	}
 	
 	@Test
 	public void testDelete(){
@@ -64,7 +98,7 @@ public class HibTest {
 	@Test
 	public void testAddNew(){
 		Dept dept = new Dept();
-		dept.setDeptno((byte)14);
+		dept.setDeptno((byte)16);
 		dept.setDname("研发部14");
 		dept.setLoc("北京市海淀区14");
 		

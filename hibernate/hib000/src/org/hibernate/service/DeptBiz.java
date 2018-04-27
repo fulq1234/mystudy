@@ -1,15 +1,20 @@
 package org.hibernate.service;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.hibernate.dao.DeptDao;
+import org.hibernate.dao.EmpDao;
 import org.hibernate.dao.HibernateUtil;
 import org.hibernate.demo.entity.Dept;
+import org.hibernate.demo.entity.Emp;
 
 public class DeptBiz {
 
+	
+	
 	/**
 	 * 删除
 	 * @param id
@@ -117,6 +122,9 @@ public class DeptBiz {
 			tx = HibernateUtil.currentSession().beginTransaction();
 			
 			new DeptDao().save(dept);
+			
+
+			//dept.setLoc("新的地址");此时dept是持久状态，它的内容一变化，hibernate一监控改变，会改变数据库中的数据。
 			
 			//提交事务
 			tx.commit();

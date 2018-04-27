@@ -38,4 +38,54 @@ merge和update区别,merge的时候dynamic-update起作用。
 
 not-null="true": 检查空值
 
+持久化对象的几种状态
+hibernate中Java对象的三种状态
+瞬间状态（Transient）
+持久状态（Persistent）
+游离状态（Detached）
 
+瞬间状态是一个临时对象，和数据库毫无关系的对象。OID
+持久状态是个有用的状态，hibernate会监控这个状态，发现有变化，就进行一些操作。这个状态一定是和数据库有关联的，存到hibernate缓存里面。
+游离状态是一个托管对象，从缓存中脱离出去，
+
+刷新缓存就是将数据库同步为与Session缓存一致。
+	刷新缓存时会执行脏检查
+Session会在以下时间点刷新缓存
+	调用Session的flush()方法
+	调用Transaction的commit()的方法
+
+更新操作
+update()方法
+saveOrUpdate()方法
+merge()方法
+
+update() 对于持久化对象，可以修改它的属性，然后在清理缓存的时候，执行脏检查。根据修改的情况，执行相关的数据更新
+saveOrUpdate()方法 对于游离态对象，直接更新方法。
+	如果是临时状态，就执行save方法，如果是游离态状态，就执行update方法
+merge()方法，直接对持久化对象的更新。
+传参方法传一个游离态对象A，取出id,根据id进行查询，得到持久化状态B,这个时候原来的入参还是游离态，还是安全的。
+
+merge()带有返回值。这个返回值就是持久化对象B,
+
+
+使用merge(A)添加数据，A是临时对象，创建一个A对象的副本B对象，对副本B对象进行save操作，B对象会保存到数据库中，会变成持久态。而入参A还是临时状态。
+保存完以后，B对象会当成返回值返回。
+
+
+hbm.xml中如果属性名和列表，不考虑大小写的情况下，一样，就可以忽略不写
+
+
+HQL语句
+
+from cn.Hibernatedemo.entity.Dept
+from Dept
+from Dept where deptName = 'SALES'
+from Dept dept where dept.location is not null
+from Emp order by hireDate,salary desc
+select deptNo,deptName from Dept
+
+执行HQL语句的步骤
+1.获取Session对象
+2.编写HQL语句
+3.创建Query对象
+4.执行查询，得到查询结果。
