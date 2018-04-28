@@ -117,3 +117,36 @@ Long count = (Long)query.uniqueResult();//返回唯一结果
 	.setString("name",deptName) //位置从0开始
 	.list();
 
+
+为参数赋值
+setXXX():针对具体数据类型
+	setXXX(int position,XXX value)
+	setXXX(String name,XXX value)
+setParameter():任意类型参数,设置Object类型，任意类型
+	setParameter(int position,Object value);
+	setParameter(String name,Object value);
+setProperties():专为命名参数定制
+
+
+public List<Emp> findByCondition(Emp conditions){
+	Query query = this.currentSession().createQuery("from Emp where job = :job and salary > :salary");
+	query.setProperties(conditions);//参数是对象参数
+	return query.list();
+}
+
+public List<Emp> findByCondition(Object[] conditions){
+	Query query = this.currentSession().createQuery("from Emp where job=? and salary>?");
+	if(conditions != null && conditions.length != 0){
+		query.setParameter(i,conditions[i]);
+	}
+	return query.list();
+}
+
+动态查询
+时间在一个区间里面,
+
+方法1.在持久化类中定义两个参数from,to
+
+方法2.专门定义个查询类(EmpDao.findByCondition)
+
+

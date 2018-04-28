@@ -1,5 +1,6 @@
 package org.hibernate.demo.test;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -9,6 +10,8 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.demo.entity.Dept;
 import org.hibernate.demo.entity.Emp;
+import org.hibernate.demo.entity.EmpCondition;
+import org.hibernate.demo.util.Tool;
 import org.hibernate.service.DeptBiz;
 import org.hibernate.service.EmpBiz;
 import org.junit.Test;
@@ -19,6 +22,18 @@ import org.junit.Test;
  *
  */
 public class HibTest {
+	
+	@Test
+	public void testfindByCondition_2() throws ParseException{
+		EmpCondition conditions = new EmpCondition();
+		conditions.setJob("1");
+		conditions.setSalary(3333.0);
+		conditions.setFrom(Tool.strToDate("1981-4-1", "yyyy-mm-dd"));
+		conditions.setTo(Tool.strToDate("1985-9-9", "yyyy-mm-dd"));
+		
+		List<Emp> emp = new EmpBiz().findByCondition(conditions);
+		System.out.println(emp.size());
+	}
 	
 	@Test
 	public void testCountEmp(){
