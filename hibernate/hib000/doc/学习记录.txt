@@ -89,3 +89,29 @@ select deptNo,deptName from Dept
 2.编写HQL语句
 3.创建Query对象
 4.执行查询，得到查询结果。
+
+方法1：
+String hql = "from Emp";
+Query query = session.createQuery(hql);
+List<Emp> empList = query.list();
+方法2：
+String hql = "from Emp";
+Query query = session.createQuery(hql);
+Iterator<Emp> empIterator = query.iterate();
+方法1就是查询出表中所有数据，方法2是查询出id值。然后直接去缓存里面去找。
+
+String hql = "select count(id) from Emp";
+Query query = session.createQuery(hql);
+Long count = (Long)query.uniqueResult();//返回唯一结果
+
+在HQL查询语句中绑定参数
+使用占位符
+1.按参数位置绑定
+	from User where name = ?
+	session.createQuery("from User where name = ?")
+	.setString(0,deptName) //位置从0开始
+	.list();
+2.按参数名称绑定
+	form User where name = :name
+
+

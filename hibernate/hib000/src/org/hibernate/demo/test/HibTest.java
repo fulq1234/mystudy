@@ -21,6 +21,12 @@ import org.junit.Test;
 public class HibTest {
 	
 	@Test
+	public void testCountEmp(){
+		long l = new EmpBiz().countEmp();
+		System.out.println(l);
+	}
+	
+	@Test
 	public void testQueryAllEmp(){
 		List<Emp> list= new EmpBiz().findAllEmp();
 		System.out.println(list.size());
@@ -46,7 +52,7 @@ public class HibTest {
 	@Test
 	public void testSaveUpdate(){
 		Emp emp = new Emp();
-		emp.setEmpName("new Emp");
+		emp.setEmpName("new Emp444");
 		
 		new EmpBiz().saveOrUpdate(emp);
 		
