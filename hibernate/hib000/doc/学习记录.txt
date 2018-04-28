@@ -113,5 +113,7 @@ Long count = (Long)query.uniqueResult();//返回唯一结果
 	.list();
 2.按参数名称绑定
 	form User where name = :name
-
+	session.createQuery("from User where name = :name")
+	.setString("name",deptName) //位置从0开始
+	.list();
 
