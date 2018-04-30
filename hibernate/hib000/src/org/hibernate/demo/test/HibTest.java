@@ -1,7 +1,9 @@
 package org.hibernate.demo.test;
 
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -23,6 +25,59 @@ import org.junit.Test;
  */
 public class HibTest {
 	
+	@Test
+	public void findProjections_3(){
+		List<Dept> result = new DeptBiz().findProjections_3();
+		for(Dept obj : result){
+			System.out.println(obj.getDname() +"\t" + obj.getLoc());
+		}
+	}
+	
+	@Test
+	public void findProjections_2(){
+		List<Object[]> result = new DeptBiz().findProjections_2();
+		for(Object[] obj : result){
+			System.out.println(obj[0] +"\t" + obj[1]);
+		}
+	}
+	
+	
+	@Test
+	public void findProjections(){
+		List<Object> result = new DeptBiz().findProjections();
+		for(Object obj : result){
+			System.out.println(obj);
+		}
+	}
+	
+	@Test
+	public void testFindByPage() throws ParseException{
+		int pageNo = 2;
+		int pageSize = 1;
+		List<Emp> emp = new EmpBiz().findByPage(pageNo,pageSize);
+		System.out.println(emp.size());
+	}
+	
+	/**
+	 * 使用map当查询条件
+	 * @throws ParseException
+	 */
+	@Test
+	public void testfindByCondition_3() throws ParseException{
+		Map<String,Object> conditions = new HashMap<String,Object>();
+		conditions.put("job","1");
+		conditions.put("salary",3333.0);
+		conditions.put("from",Tool.strToDate("1981-4-1", "yyyy-mm-dd"));
+		conditions.put("to",Tool.strToDate("1985-9-9", "yyyy-mm-dd"));
+		
+		List<Emp> emp = new EmpBiz().findByCondition(conditions);
+		System.out.println(emp.size());
+	}
+	
+	/**
+	 * 测试查询类
+	 * @throws ParseException
+	 */
 	@Test
 	public void testfindByCondition_2() throws ParseException{
 		EmpCondition conditions = new EmpCondition();

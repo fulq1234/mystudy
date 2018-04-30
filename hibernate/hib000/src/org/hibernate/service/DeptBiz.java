@@ -6,14 +6,69 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.hibernate.dao.DeptDao;
-import org.hibernate.dao.EmpDao;
+
 import org.hibernate.dao.HibernateUtil;
 import org.hibernate.demo.entity.Dept;
-import org.hibernate.demo.entity.Emp;
+
 
 public class DeptBiz {
-
 	
+	private DeptDao dao = new DeptDao();
+	
+	public List<Dept> findProjections_3(){
+		Transaction tx = null;
+		List<Dept> result = null;
+		
+		try{
+			tx = dao.currentSession().beginTransaction();
+			result = dao.findByProjection_3();
+			tx.commit();
+		}catch(HibernateException e){
+			e.printStackTrace();
+			if(tx != null){
+				tx.rollback();
+			}
+		}
+		return result;
+	}
+	
+	public List<Object[]> findProjections_2(){
+		Transaction tx = null;
+		List<Object[]> result = null;
+		
+		try{
+			tx = dao.currentSession().beginTransaction();
+			result = dao.findByProjection_2();
+			tx.commit();
+		}catch(HibernateException e){
+			e.printStackTrace();
+			if(tx != null){
+				tx.rollback();
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<Object> findProjections(){
+		Transaction tx = null;
+		List<Object> result = null;
+		
+		try{
+			tx = dao.currentSession().beginTransaction();
+			result = dao.findByProjection();
+			tx.commit();
+		}catch(HibernateException e){
+			e.printStackTrace();
+			if(tx != null){
+				tx.rollback();
+			}
+		}
+		return result;
+	}
 	
 	/**
 	 * É¾³ý

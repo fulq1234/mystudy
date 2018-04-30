@@ -1,12 +1,38 @@
 package org.hibernate.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Query;
 import org.hibernate.demo.entity.Emp;
 import org.hibernate.demo.entity.EmpCondition;
 
 public class EmpDao extends BaseDao {
+	
+	/**
+	 * 分页
+	 * @param pageNo：第几页
+	 * @param pageSize：一页显示几行
+	 * @return
+	 */
+	public List<Emp> findByPage(int pageNo,int pageSize){
+		return this.currentSession().createQuery("from  Emp order by id")
+				.setFirstResult((pageNo -1) * pageSize)//设置从第几条开始
+				.setMaxResults(pageSize)//设置读取最大记录数
+				.list();
+	}
+	
+	/**
+	 * 根据条件查询语句
+	 * @param hql
+	 * @param conditions
+	 * @return
+	 */
+	public List<Emp> findByCondition(String hql,Map<String,Object> conditions){
+		Query query = this.currentSession().createQuery(hql);
+		query.setProperties(conditions);
+		return query.list();
+	}
 	
 	/**
 	 * 根据条件查询语句

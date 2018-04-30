@@ -5,6 +5,16 @@ public class Dept implements java.io.Serializable{
 	private Byte deptno;
 	private String dname;
 	private String loc;
+	
+	public Dept(){
+		
+	}
+	
+	public Dept(String dname,String loc){
+		this.dname = dname;
+		this.loc = loc;
+	}
+	
 	public Byte getDeptno() {
 		return deptno;
 	}

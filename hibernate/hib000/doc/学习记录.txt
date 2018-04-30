@@ -149,4 +149,32 @@ public List<Emp> findByCondition(Object[] conditions){
 
 方法2.专门定义个查询类(EmpDao.findByCondition)
 
+方法3.定义Map
+
+想在console中看到查询sql的参数，需要在log4j.properties
+中配置
+log4j.logger.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+表示类org.hibernate.type.descriptor.sql.BasicBinder的级别是TRACE
+
+分页查询
+查询第一页的雇员信息，按雇员编号升序排列，每页显示2条记录。
+Query接口的相关方法
+uniqueResult()
+setFirstResult():设置从第几条开始
+setMaxResults():设置读取最大记录数
+
+投影查询
+投影查询：查询一个或多个属性，但不全部查询，这就是投影查询
+投影查询需要使用HQL的select字句,
+只要用了select语句，hibernate就认为是散装的，用Object修饰。不会封装成对象，即使select出全部字段，也不会封装成对象
+查询结果的封装主要分三种情况
+封装成Object对象
+封装成Object数组
+通过构造方法封装成对象
+	对象不是持久化状态，仅用于封装结果。
+
+若查询结果仅用于展示，不需要保持持久化状态，应尽量使用投影查询以减少开销，提高效率。
+
+
+
 
