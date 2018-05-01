@@ -12,6 +12,44 @@ import org.hibernate.demo.entity.Emp2;
 public class DeptBiz {
 	private DeptDao dao = new DeptDao();
 	
+	/**
+	 * 不管部门下面有没有员工，都删除
+	 * @param deptno
+	 */
+	public void deleteDept(byte deptno){
+		Transaction tx = null;
+		
+		try{
+			tx = dao.currentSession().beginTransaction();
+			dao.delete(deptno);
+			tx.commit();
+		}catch(HibernateException e){
+			e.printStackTrace();
+			if(tx != null){
+				tx.rollback();
+			}
+		}
+		
+		
+	}
+	
+	public void addNewDept(Dept dept){
+		Transaction tx = null;
+		
+		try{
+			tx = dao.currentSession().beginTransaction();
+			dao.save(dept);
+			tx.commit();
+		}catch(HibernateException e){
+			e.printStackTrace();
+			if(tx != null){
+				tx.rollback();
+			}
+		}
+		
+		
+	}
+	
 	public Dept findById(byte deptno){
 		Transaction tx = null;
 		Dept result = null;

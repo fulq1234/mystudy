@@ -14,3 +14,9 @@ Dept.hbm.xml
 	</class>
 
 在一的一方，写个Set集合，需要初始化;
+
+
+cascade属性
+级联关系下的增删改查功能
+
+一对多的情况下， cascade放在一的一方。
