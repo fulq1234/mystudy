@@ -33,3 +33,46 @@ inverse属性指定了关联关系中的方法
 
 1.在建立两个对象的双向关联时，应该同时修改两个关联对象的相关属性
 2.建立inverse设置为true
+
+多对多映射
+
+项目表(PROGECT),雇员表(EMPLOTEE)
+一个项目可以有多个雇员。
+一个雇员也可以参加多个项目。项目和雇员就是多对多关系
+他们不能直接产生关系，需要一个关系表（ PROEMP）
+
+配置Project和Employee的多对多双向关联
+public class Project implements java.io.Serializable{
+	private Integer proid;
+	private String proname;
+	private Set<Employee> employees = new HashSet<Employee>(0);
+}
+
+public class Employee implements java.io.Serializable{
+	private Integer empid;
+	private String empname;
+	private Set<Project> projects = new HashSet<Project>(0);
+}
+
+<class name="cn.hibernatedemo.entity.Project" table="PROJECT">
+	<id name="proid" type="java.lang.Integer">
+		<column name="PROID" precision="6" scale="0"/>
+		<generator class="assigned"/>
+	</id>
+	... ...
+	<set name="employees" table="PROEMP" cascade="save-update">
+	<!--table属性是关系表-->
+		<key column="RPROID"/><!--关系表的外键字段-->
+		<many-to-many class="cn.hibernatedemo.entity.Employee" column="REMPID"/><!--column雇员的外键-->
+	</set>
+</class>
+
+对应另外一方
+<set name="projects" table="PROEMP" inverse="true">
+	<key column="REMPID"/>
+	<many-to-many class="cn.hibernatedemo.entity.Project" column="RPROID"/>
+</set>
+
+两方都有外键，所以有一个是主控方，一方是被控方。
+
+

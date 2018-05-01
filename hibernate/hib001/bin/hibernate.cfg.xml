@@ -33,6 +33,8 @@
 		<mapping resource="org/hibernate/demo/entity/Dept.hbm.xml"/>
 		
 		<mapping resource="org/hibernate/demo/entity/Emp2.hbm.xml"/>
+		<mapping resource="org/hibernate/demo/entity/Project.hbm.xml"/>
+		<mapping resource="org/hibernate/demo/entity/Employee.hbm.xml"/>
 		
 	</session-factory>
 </hibernate-configuration>

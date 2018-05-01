@@ -4,7 +4,7 @@ Source Host: localhost
 Source Database: feifei
 Target Host: localhost
 Target Database: feifei
-Date: 2018/5/1 17:48:57
+Date: 2018/5/1 21:16:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,7 +31,7 @@ CREATE TABLE `dept` (
   `LOC` varchar(32) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`DEPTNO`),
   KEY `DEPTNO` (`DEPTNO`)
-) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Table structure for emp
@@ -65,6 +65,16 @@ CREATE TABLE `emp2` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
+-- Table structure for employee
+-- ----------------------------
+DROP TABLE IF EXISTS `employee`;
+CREATE TABLE `employee` (
+  `empid` smallint(6) NOT NULL DEFAULT '0',
+  `empname` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`empid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='雇员表';
+
+-- ----------------------------
 -- Table structure for keci
 -- ----------------------------
 DROP TABLE IF EXISTS `keci`;
@@ -75,6 +85,29 @@ CREATE TABLE `keci` (
   `keshi` int(11) DEFAULT '2' COMMENT '属于多少课时 默认2',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for proemp
+-- ----------------------------
+DROP TABLE IF EXISTS `proemp`;
+CREATE TABLE `proemp` (
+  `rproid` smallint(6) DEFAULT NULL COMMENT '项目表(PROGECT)的主键',
+  `rempid` smallint(6) DEFAULT NULL COMMENT '雇员表(EMPLOTEE)的主键值',
+  KEY `fk_proid` (`rproid`),
+  KEY `fk_empid` (`rempid`),
+  CONSTRAINT `fk_proid` FOREIGN KEY (`rproid`) REFERENCES `project` (`proid`),
+  CONSTRAINT `fk_empid` FOREIGN KEY (`rempid`) REFERENCES `employee` (`empid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='一个项目可以有多个雇员。\r\n一个雇员也可以参加多个项目。项目和雇员就是多对多关系\r\n他们不能直接产生关系，需要一个关系表';
+
+-- ----------------------------
+-- Table structure for project
+-- ----------------------------
+DROP TABLE IF EXISTS `project`;
+CREATE TABLE `project` (
+  `proid` smallint(6) NOT NULL DEFAULT '0',
+  `proname` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`proid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='项目表';
 
 -- ----------------------------
 -- Table structure for ssmds_role
@@ -223,17 +256,30 @@ INSERT INTO `class` VALUES ('8', '1708', '30', '0', '0');
 INSERT INTO `class` VALUES ('9', '1801', '30', '0', '0');
 INSERT INTO `dept` VALUES ('1', '研发部', '石家庄裕华区');
 INSERT INTO `dept` VALUES ('80', 'dept001', '北京');
+INSERT INTO `dept` VALUES ('82', 'dept003', '宁波');
+INSERT INTO `dept` VALUES ('83', 'dept004', '宁波');
 INSERT INTO `emp` VALUES ('new Emp2', '1', null, null, null);
 INSERT INTO `emp` VALUES ('new Emp444', '2', null, null, null);
 INSERT INTO `emp` VALUES ('周小二', '3', '1982-09-01', '1', '3333.0');
 INSERT INTO `emp2` VALUES ('0', '1222', null, null, null, null, null, '1');
 INSERT INTO `emp2` VALUES ('1', 'dp1 e2', null, null, null, null, null, null);
 INSERT INTO `emp2` VALUES ('2', 'dp1 e1', null, null, null, null, null, null);
+INSERT INTO `emp2` VALUES ('3', 'dp1 e2', null, null, null, null, null, '82');
+INSERT INTO `emp2` VALUES ('4', 'dp1 e1', null, null, null, null, null, '82');
+INSERT INTO `emp2` VALUES ('5', 'dp1 e2', null, null, null, null, null, '83');
+INSERT INTO `emp2` VALUES ('6', 'dp1 e1', null, null, null, null, null, '83');
+INSERT INTO `employee` VALUES ('3', '王五');
+INSERT INTO `employee` VALUES ('4', '赵六');
 INSERT INTO `keci` VALUES ('1', '8:30-10:10', '1', '2');
 INSERT INTO `keci` VALUES ('2', '10:20-120', '2', '2');
 INSERT INTO `keci` VALUES ('3', '14:00-15:40', '3', '2');
 INSERT INTO `keci` VALUES ('4', '16:00-17:40', '4', '2');
 INSERT INTO `keci` VALUES ('5', '19:00-12:40', '5', '2');
+INSERT INTO `proemp` VALUES ('3', '3');
+INSERT INTO `proemp` VALUES ('3', '4');
+INSERT INTO `proemp` VALUES ('4', '3');
+INSERT INTO `project` VALUES ('3', '3号项目');
+INSERT INTO `project` VALUES ('4', '4号项目');
 INSERT INTO `ssmds_role` VALUES ('1', 'SMBMS_ADMIN', '系统管理员', '1', '2016-04-13', null, null);
 INSERT INTO `ssmds_user` VALUES ('1', 'admin', 'admin', 'admin', '1', '1983-10-10', '13688889999', '北京市海淀区成府路207号', '1', '1', '2013-03-21', null, null, null, null);
 INSERT INTO `ssmds_user` VALUES ('7', '123456', '123456', '123456789', '1', '2018-04-16', '15932116119', '是打发士大夫', '1', '1', '2018-04-21', null, null, null, null);
