@@ -22,8 +22,8 @@ public class HibTest {
 	@Test
 	public void testAddNewDept(){
 		Dept dept = new Dept();
-		dept.setDeptno((byte)82);
-		dept.setDname("dept003");
+		dept.setDeptno((byte)83);
+		dept.setDname("dept004");
 		dept.setLoc("Äþ²¨");
 		
 		Emp2 emp1 = new Emp2();

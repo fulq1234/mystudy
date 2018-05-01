@@ -30,7 +30,10 @@
         <property name="loc" type="java.lang.String" access="field">
             <column name="LOC" />
         </property>
-        <set name="emps" cascade="save-update,delete"><!-- cascade级联 -->
+        <set name="emps" inverse="true" cascade="save-update,delete">
+        <!-- cascade级联 ,
+        	inverse设置为true,不负责维护关联关系,不执行update语句
+        -->
         	<key column="DEPTNO"></key>
         	<one-to-many class="org.hibernate.demo.entity.Emp2" />
         </set>
