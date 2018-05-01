@@ -175,7 +175,7 @@ public class HibTest {
 	public void testAddNew(){
 		Dept dept = new Dept();
 		dept.setDeptno((byte)16);
-		dept.setDname("研发部14");
+		dept.setDname("招生部");
 		dept.setLoc("北京市海淀区14");
 		
 		new DeptBiz().addNewDept(dept);

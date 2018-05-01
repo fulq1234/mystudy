@@ -4,7 +4,7 @@ Source Host: localhost
 Source Database: feifei
 Target Host: localhost
 Target Database: feifei
-Date: 2018/4/28 12:02:07
+Date: 2018/5/1 10:15:27
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -26,10 +26,12 @@ CREATE TABLE `class` (
 -- ----------------------------
 DROP TABLE IF EXISTS `dept`;
 CREATE TABLE `dept` (
-  `DEPTNO` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  `DEPTNO` tinyint(32) NOT NULL AUTO_INCREMENT,
   `DNAME` varchar(32) COLLATE utf8_bin DEFAULT NULL,
-  `LOC` varchar(32) COLLATE utf8_bin DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `LOC` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`DEPTNO`),
+  KEY `DEPTNO` (`DEPTNO`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Table structure for emp
@@ -37,10 +39,29 @@ CREATE TABLE `dept` (
 DROP TABLE IF EXISTS `emp`;
 CREATE TABLE `emp` (
   `empname` varchar(32) COLLATE utf8_bin DEFAULT NULL,
-  `empno` int(11) DEFAULT NULL,
+  `empno` int(11) NOT NULL DEFAULT '0',
   `hireDate` date DEFAULT NULL,
   `job` varchar(32) COLLATE utf8_bin DEFAULT NULL,
-  `salary` double(12,1) DEFAULT NULL
+  `salary` double(12,1) DEFAULT NULL,
+  PRIMARY KEY (`empno`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Table structure for emp2
+-- ----------------------------
+DROP TABLE IF EXISTS `emp2`;
+CREATE TABLE `emp2` (
+  `empno` smallint(6) NOT NULL DEFAULT '0',
+  `ename` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  `job` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  `mgr` int(11) DEFAULT NULL,
+  `hiredate` date DEFAULT NULL,
+  `sal` double(12,2) DEFAULT NULL,
+  `comm` double(12,2) DEFAULT NULL,
+  `deptno` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`empno`),
+  KEY `fk_deptno` (`deptno`),
+  CONSTRAINT `fk_deptno` FOREIGN KEY (`deptno`) REFERENCES `dept` (`DEPTNO`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
@@ -200,13 +221,9 @@ INSERT INTO `class` VALUES ('6', '1706', '30', '0', '0');
 INSERT INTO `class` VALUES ('7', '1707', '30', '0', '0');
 INSERT INTO `class` VALUES ('8', '1708', '30', '0', '0');
 INSERT INTO `class` VALUES ('9', '1801', '30', '0', '0');
-INSERT INTO `dept` VALUES ('10', '研发部', '北京市海淀区');
-INSERT INTO `dept` VALUES ('11', '新名称', '广新2');
-INSERT INTO `dept` VALUES ('14', '研发部14', '北京市海淀区14');
-INSERT INTO `dept` VALUES ('16', '研发部14', '新的地址');
+INSERT INTO `dept` VALUES ('1', '研发部', '石家庄裕华区');
 INSERT INTO `emp` VALUES ('new Emp2', '1', null, null, null);
 INSERT INTO `emp` VALUES ('new Emp444', '2', null, null, null);
-INSERT INTO `emp` VALUES ('wangxiaoer', '3', null, '1', '3333.0');
 INSERT INTO `emp` VALUES ('周小二', '3', '1982-09-01', '1', '3333.0');
 INSERT INTO `keci` VALUES ('1', '8:30-10:10', '1', '2');
 INSERT INTO `keci` VALUES ('2', '10:20-120', '2', '2');

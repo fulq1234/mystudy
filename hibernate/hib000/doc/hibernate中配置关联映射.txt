@@ -1,0 +1,20 @@
+关联映射避免了在对象模型和关系数据模型之间的切换
+关联关系是有方向的
+
+数据库表
+部门表dept(deptno)
+雇员表emp(empno,deptno)
+雇员表deptno是个外键字段，指向部门表
+
+持久化类设计
+Emp持久化类
+public class Emp implements Serializable{
+	private Dept dept;//省略其它属性及getter,setter访问器
+}
+Emp.hbm.xml
+<class name="cn.hibernatedemo.entity.Emp" table="EMP">
+	<many-to-one name="dept" column="DEPTNO" class="cn.hibernatedemo.entity.Dept"/>
+</class>
+
+它会创建一个部门实例，并且把这个值作为oid传给部门实例。
+

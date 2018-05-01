@@ -32,6 +32,7 @@
 		<!-- 映射信息 -->
 		<mapping resource="org/hibernate/demo/entity/Dept.hbm.xml"/>
 		<mapping resource="org/hibernate/demo/entity/Emp.hbm.xml"/>
+		<mapping resource="org/hibernate/demo/entity/Emp2.hbm.xml"/>
 		
 	</session-factory>
 </hibernate-configuration>
