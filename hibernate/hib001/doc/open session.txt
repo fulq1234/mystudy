@@ -1,0 +1,18 @@
+open session in view
+
+public class OpenSessionInViewFilter implements Filter{
+	public void doFilter(ServletRequest arg0,ServletResponse arg1,FilterChain arg2) throws IOException,ServletException{
+		Transaction tx = null;
+		try{
+			tx = HibernateUtil.currentSession().beginTransaction();
+			arg2.doFilter(arg0,arg1);
+			tx.commit();
+		}catch(HibernateException e){
+			if(tx != null)
+				tx.rollback();
+		}
+	}
+}
+
+web.xmlµƒfilter≈‰÷√¬∑æ∂ «/*
+

@@ -158,13 +158,19 @@ public class HibTest {
 	
 	@Test
 	public void testGet(){
-		Dept result = new DeptBiz().findById_get((byte)11);
+		Dept result = new DeptBiz().findById_get((byte)1);
 		System.out.println(result.getDname());
 	}
 	
 	@Test
 	public void testLoad(){
-		Dept result = new DeptBiz().findById_load((byte)11);
+		Dept result = new DeptBiz().findById_load((byte)1);
+		/**查不出来值，因为是默认的延迟加载。 
+		* 想要得到值，
+		* 1.可以在class上设置属性lazy="false"
+		* 2.在会话关闭之前输出值
+		**/
+		System.out.println(result.getDeptno());
 		System.out.println(result.getDname());
 		
 	}

@@ -76,3 +76,48 @@ public class Employee implements java.io.Serializable{
 两方都有外键，所以有一个是主控方，一方是被控方。
 
 
+get()方法和load()方法的区别
+延迟加载（lazy load懒加载）是当在真正需要数据时，才执行SQL语句进行查询，避免了无谓的性能开销。
+延迟加载策略的设置分为
+[情况1].类级别的查询策略(只有true和false)
+[情况2].一对多和多对多关联的查询策略
+[情况3].多对一关联的查询策略。
+
+[情况1].类(class)级别，只有true和false
+
+[情况2].一对多和多对多关联的查询策略
+one-to-many,set
+
+lazy属性值	加载策略
+true		延迟加载
+false		立即加载
+extra		增加延迟加载
+
+[情况3].多对一关联的查询策略
+many-to-one
+lazy属性值	加载策略
+proxy(默认)		延迟加载
+no-proxy	无代理延迟加载
+false		立即加载
+
+延迟加载(lazy)是可以设置开启和关闭的。
+
+
+load是根据类级的延迟加载级别
+
+lazy值有true,false,extra(增强版延迟)。
+看一下有多少人(size) ，或者看看有没有这个值(contains),就是对集合的一些操作。如果是true，不好，会查出所有值。
+那extra值，就不会全部都查出来。
+
+建议给set属性的lazy属性设置成extra
+
+
+
+如果想查询雇员，雇员的信息设置成proxy。那么部门对象就是延迟加载的。
+proxy 可以最大限度的推迟加载对象。
+如果采取no-proxy.当访问getEmp，获取部门的方法，就必须加载部门了。不会等待。
+默认情况下采取proxy
+
+open session in View模式
+在用户的每一次请求过程始终保持一个Session对象打开着。
+

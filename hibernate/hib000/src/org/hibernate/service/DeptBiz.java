@@ -155,7 +155,7 @@ public class DeptBiz {
 		Dept dept = null;
 		try{
 			tx = HibernateUtil.currentSession().beginTransaction();
-			dept = new DeptDao().load(id);
+			dept = new DeptDao().load(id);			
 			tx.commit();
 		}catch(HibernateException e){
 			e.printStackTrace();
