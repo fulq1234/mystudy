@@ -1,0 +1,89 @@
+连接查询，迫切连接查询
+
+迫切左连接，返回的就是左边的对象.
+如果是迫切左连接，会立刻对关联属性初始化。普通的连接则不会。
+
+
+等值连接
+from Dept d,Emp e where d = e.dept;//雇员中的部门登于部门
+等值连接适用于类和类没有关系。
+
+
+隐式内连接
+from Emp e where e.dept.dname = 'SALES' -- 用于where子句
+select empno,ename,dept.dname from Emp --用于where子句
+
+Hibernate会根据关联关系自动使用等值连接（等效于内连接）查询
+允许以更加面向对象的方式编写HQL语句，更多的依赖对象间的关系，而不必考虑数据库结构。
+
+
+分组查询，聚合函数
+聚合函数：
+count() 统计记录条数
+sum()  求和
+max()  求最大值
+min()  求最小值
+avg()  求平均数
+
+//普通sql select count(id) from Emp;
+HQL
+String hql = "select e.job,count(id) from Emp e group by e.job";//每个职位的员工数量
+List<Object[]> result = session.createQuery(hql).list();
+for(Object[] row : result){
+	System.out.println(row[0] + "\t" +row[1] + "\t" +row[2]);
+}
+
+
+子查询
+子查询语句应用在HQL查询语句的where字句中
+all	返回的所有记录
+any	返回的任意一条记录
+some	和"any"意思相同
+in	与"=any"意思相同
+exists	至少返回一条记录
+
+完成功能1.大于平均工资的员工
+//普通sql:select avg(sal) from Emp
+//HQL语句
+String hql = "from Emp e where e.sal > (select avg(sal) from Emp)";
+for(Emp emp : (List<Emp>)session.createQuery(hql).list()){
+	System.out.println(emp.getEname());
+}
+
+完成功能2：有人薪水低于1000
+//select e.sal from Emp e where e.dept = ?
+//String hql = "from Dept d where 1000 > any(select e.sal from Emp e where e.dept = ?)";//但是?要是父查询的对象
+String hql = "from Dept d where 1000 > any(select e.sal from Emp e where e.dept = d)";
+
+
+查询性能优化
+Hibernate查询优化策略
+1.使用延迟加载等方式避免加载多余数据
+2.通过使用连接查询，配置二级缓存，查询缓存等方式减少select语句数目
+3.结合缓存机制，使用iterate()方法减少查询字段数及数据库访问次数(对比list()方法和iterate()方法)
+HQL优化
+1.注意避免or,not,like使用不当导致的索引失效
+2.注意避免having子句,distinct导致的开销
+3.注意避免对索引字段使用函数或进行计算导致的索引失效
+
+or连接的两个表，如果一个表没有索引，会导致引起全表扫描
+
+
+Hibernate注解
+代替hbm.xml文件完成对象-关系映射
+使用步骤如下：
+1.使用注解配置持久化类以及对象关联关系
+2.在Hibernate配置文件（hibernate.cfg.xml）中声明持久化类（<mapping class ="持久化类完整限定名"/>）
+
+@Entity		将一个类声明为一个持久化类
+@Table		为持久化类映射指定表
+@Id		声明了持久化类的标识属性
+@GeneratedValue	定义标识属性值得生成策略
+@SequenceGenerator定义序列生产器
+@Column		将属性映射到列（字段）
+@Transient	将忽略这些属性
+
+
+
+
+
