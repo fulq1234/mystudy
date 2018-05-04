@@ -1,0 +1,305 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<%
+    response.setHeader("Access-Control-Allow-Origin", "*");
+%>
+<div class="">
+  <div class="x_panel">
+    <div class="x_title">
+      <h2>爬虫任务列表</h2>
+      <ul class="nav navbar-right panel_toolbox">
+        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">Settings 1</a>
+            </li>
+            <li><a href="#">Settings 2</a>
+            </li>
+          </ul>
+        </li>
+        <li><a class="close-link"><i class="fa fa-close"></i></a>
+        </li>
+      </ul>
+      <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <form class="form-horizontal form-label-left input_mask" role="form">
+            <div class="form-group">
+                <div class="col-md-3 col-sm-3 col-xs-12 form-group">
+                    <label for="taskName">任务名称</label>
+                    <input type="text" class="form-control" id="taskName" name="taskName" placeholder="请输入任务名称">
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-12 form-group">
+                    <label for="ruleId">规则</label>
+                    <select name="ruleId" id="ruleId" class="form-control col-md-7 col-xs-12"></select>
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-12 form-group">
+                    <label for="threadCount">线程数目</label>
+                    <input type="text" class="form-control" id="threadCount" name="threadCount" placeholder="请输入线程数目">
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-12 form-group">
+                    <label for="progress">进度</label>
+                    <input type="text" class="form-control" id="progress" name="progress" placeholder="请输入进度">
+                </div>
+            </div>
+        </form>
+      <div class="form-inline pull-left">
+        <div class="form-group" style="margin-left: 5px;">
+          <button type="button" class="btn btn-primary" id="search">搜索</button>
+          <button type="button" class="btn btn-info" id="add">新增</button>
+          <button type="button" class="btn btn-danger" id="remove">删除</button>
+        </div>
+      </div>
+      <table id="table"></table>
+    </div>
+  </div>
+</div>
+<script>
+   $(function () {
+       loadRuleList();
+   });
+   function formatBackground(color) {
+       return {
+           css: {
+               "background-color": color
+           }
+       }
+   }
+   var table=$('#table').bootstrapTable({
+        url: '${ctx}/client/crawlerTask/search',
+        sidePagination:"server",
+        pageList: [10, 25, 50, 100],
+        pageNumber: 1, //初始化加载第一页，默认第一页
+        pagination:true,//是否分页
+        queryParamsType:'limit',//查询参数组织方式
+        pageSize:10,//单页记录数
+        pageList:[5,10,20,30],//分页步进值
+        clickToSelect: true,//是否启用点击选中行
+        toolbarAlign:'right',//工具栏对齐方式
+        buttonsAlign:'right',//按钮对齐方式
+        showColumns:true,
+        showRefresh:true,
+        searchAlign:'right',
+        checkboxHeader:true,
+        columns: [{
+            checkbox:true,
+            clickToSelect:true,
+        },
+        {
+            field: 'taskName',
+            title: '任务名称'
+        },
+        {
+            field: 'typeName',
+            title: '采集数据'
+        },
+        {
+            field: 'ruleName',
+            title: '规则名称',
+            width:'100px'
+        },
+        {
+            field: 'dataProgress',
+            title: '爬取进度',
+            width:'50px'
+        },
+        {
+            field: 'keywordProgress',
+            title: '抽取进度',
+            width:'50px'
+        },
+        {
+            field: 'threadCount',
+            title: '线程数目',
+            width:'50px'
+        },
+        {
+            field: 'dataCounts',
+            title: '已采集次数'
+        },
+        {
+            field: 'keywordCounts',
+            title: '抽取次数'
+        },
+        {
+            field: 'totalCount',
+            title: '采集数目总数'
+        },
+        {
+            field: 'status',
+            title: '状态',
+            formatter:function (value,row,index) {
+                if(value==0){
+                    return "待执行";
+                }else if(value==1){
+                    return "爬取中...";
+                }else if(value==2){
+                    return "抽取中...";
+                }
+            },
+            cellStyle : function (value, row, index) {
+                var color="";
+                if(value==0){
+                    color= "white";
+                }else if(value==1){
+                    color= "red";
+                }else if(value==2){
+                    color= "blue";
+                }
+                return {
+                    css: {
+                        "background-color": color
+                    }
+                };
+            }
+        },
+        {
+            title: '操作',
+            width:"300px",
+            formatter:function (value,row,index) {
+                var edit="<a href='#' class='btn btn-info btn-xs' onclick=\"editCrawlerTask('"+row.id+"')\"><i class='fa fa-pencil'></i> 编辑 </a>";
+                var del="<a href='#' class='btn btn-danger btn-xs' onclick=\"removeCrawlerTask('"+row.id+"')\"><i class='fa fa-trash-o'></i> 删除 </a>";
+                var execute="<a href='#' class='btn btn-danger btn-xs' onclick=\"executeTask('"+row.id+"')\"><i class='fa  fa-dedent'></i>爬取数据</a>";
+                var extract="<a href='#' class='btn btn-danger btn-xs' onclick=\"extract('"+row.id+"')\"><i class='fa fa-book'></i>抽取技能</a>";
+                return edit+del+execute+extract;
+            }
+        }],
+        queryParams: function queryParams(params) {  //设置查询参数
+            var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                pageSize: params.limit,   //页面大小
+                pageNo:(params.offset/params.limit)+1,
+                sortOrder: params.order,
+                taskName:$("#taskName").val(),
+                ruleId:$("#ruleId").val(),
+                threadCount:$("#threadCount").val()
+            };
+            return temp;
+        },
+        responseHandler:function (res) {
+            return {"rows":res.rows,"total":res.total};
+        },
+    });
+   $("#search").click(function () {
+       $('#table').bootstrapTable('refresh', null);
+   });
+   $("#add").click(function () {
+       window.loadContent("${ctx}/crawlerTask/addCrawlerTask.jsp",null);
+   });
+   $("#remove").click(function () {
+      var ids="";
+      var selectItems=$('#table').bootstrapTable('getSelections', null);
+      for (var i=0;i<selectItems.length;i++){
+          ids=ids+","+selectItems[i].id;
+      }
+      if(ids==''){
+          alert({"title":"提示","content":"请选择要删除的数据"});
+      }else{
+          confirm({
+              title:"批量删除确认",
+              content:"请确认是否要执行批量删除操作？",
+              ok:function () {
+                  $.ajax({
+                      type: 'POST',
+                      url: '${ctx}/client/crawlerTask/batchRemoveCrawlerTask',
+                      data: {ids:ids},
+                      dataType:"json",
+                      success: function (result) {
+                          if(result.status=="0"){
+                              $('#table').bootstrapTable('refresh', null);
+                          }else{
+                              alert({
+                                  title:"操作提示",
+                                  content:result.message
+                              })
+                          }
+                      }
+                  });
+              },
+          });
+      }
+   });
+   //查看关键词
+   function viewCrawlerTask(content) {
+       dialog({
+           width:"606px",
+           height:"200px",
+           content:content
+       });
+   }
+   //编辑关键词
+   function editCrawlerTask(id) {
+       window.loadContent("${ctx}/crawlerTask/updateCrawlerTask.jsp?id="+id,null);
+   }
+   //删除关键词
+   function removeCrawlerTask(id) {
+       confirm({
+           title:"删除关键词提示",
+           content:"请确认是否删除信息?",
+           ok:function () {
+               $.ajax({
+                   type: 'POST',
+                   url: '${ctx}/client/crawlerTask/removeCrawlerTaskById',
+                   data: {id:id},
+                   dataType:"json",
+                   success: function (result) {
+                       if(result.status=="0"){
+                           $('#table').bootstrapTable('refresh', null);
+                       }else{
+                           alert({"title":"删除提示","content":result.message});
+                       }
+                   }
+               });
+           }
+       });
+   }
+   //加载规则列表
+   function loadRuleList() {
+       $.ajax({
+           type: 'POST',
+           url: '${ctx}/client/crawlerRules/list',
+           dataType:"json",
+           success: function (result) {
+               var options="<option value='-1'>全部</option>";
+               for(var i=0;i<result.length;i++){
+                   options=options+"<option value='"+result[i].id+"'>"+result[i].ruleName+"</option>";
+               }
+               $("#ruleId").html(options);
+           }
+       });
+   }
+   //执行任务
+   function executeTask(id) {
+       $.ajax({
+           type: 'POST',
+           url: '${ctx}/execute',
+           data:{"taskId":id},
+           success: function (result) {
+               if(result.status==0){
+                   alert({"title":"执行提示","content":result.message});
+                   $('#table').bootstrapTable('refresh', null);
+               }else{
+                   alert({"title":"执行提示","content":result.message});
+               }
+           }
+       });
+   }
+   //抽取数据
+   function extract(id) {
+       $.ajax({
+           type: 'POST',
+           url: '${ctx}/filterData',
+           data:{"taskId":id},
+           success: function (result) {
+               if(result.status==0){
+                   alert({"title":"执行提示","content":result.message});
+                   $('#table').bootstrapTable('refresh', null);
+               }else{
+                   alert({"title":"执行提示","content":result.message});
+               }
+           }
+       });
+   }
+</script>

@@ -83,6 +83,14 @@ Hibernate注解
 @Column		将属性映射到列（字段）
 @Transient	将忽略这些属性
 
+举例1.
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_emp")
+    @SequenceGenerator(name = "seq_emp", sequenceName = "seq_emp_id", allocationSize = 10, initialValue = 1)
+举例2.使用hibernate中生成的生成器
+    @Id
+    @GenericGenerator(strategy="increment",name="EMP_INC")
+    @GeneratedValue(generator="EMP_INC");
 
 
 

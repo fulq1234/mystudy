@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kgc.dao.crawlerDataType.CrawlerDataTypeMapper">
+
+    <select id="getCrawlerDataTypeById" resultType="cn.kgc.beans.CrawlerDataType" >
+        select
+                id as id,
+                typeName as typeName,
+                stopWord as stopWord,
+                extWord as extWord,
+                createdTime as createdTime,
+                updatedTime as updatedTime
+        from crawler_data_type
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="id != null">
+                and id=#{id}
+            </if>
+        </trim>
+    </select>
+
+    <select id="getCrawlerDataTypeListByMap" resultType="cn.kgc.beans.CrawlerDataType" parameterType="java.util.Map">
+        select
+                id as id,
+                typeName as typeName,
+                stopWord as stopWord,
+                extWord as extWord,
+                createdTime as createdTime,
+                updatedTime as updatedTime
+        from crawler_data_type
+        <trim prefix="where" prefixOverrides="and | or">
+                <if test="id != null and id!=-1">
+                    and id=#{id}
+                </if>
+                <if test="typeName != null and typeName!=-1">
+                    and typeName like concat('%',#{typeName},'%')
+                </if>
+        </trim>
+        <if test="beginPos != null and pageSize != null ">
+            limit #{beginPos},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getCrawlerDataTypeCountByMap" resultType="Integer"  parameterType="java.util.Map">
+        select count(*) from crawler_data_type
+        <trim prefix="where" prefixOverrides="and | or">
+                <if test="id != null and id!=-1">
+                    and id=#{id}
+                </if>
+                <if test="typeName != null and typeName!='-1'">
+                    and typeName=#{typeName}
+                </if>
+                <if test="stopWord != null and stopWord!='-1'">
+                    and stopWord=#{stopWord}
+                </if>
+                <if test="extWord != null and extWord!='-1'">
+                    and extWord=#{extWord}
+                </if>
+                <if test="createdTime != null and createdTime!=-1">
+                    and createdTime=#{createdTime}
+                </if>
+                <if test="updatedTime != null and updatedTime!=-1">
+                    and updatedTime=#{updatedTime}
+                </if>
+        </trim>
+    </select>
+
+    <insert id="insertCrawlerDataType" parameterType="cn.kgc.beans.CrawlerDataType">
+        insert into crawler_data_type(
+                        typeName,
+                        stopWord,
+                        extWord,
+                        createdTime,
+                        updatedTime)
+        values(
+                     #{typeName},
+                     #{stopWord},
+                     #{extWord},
+                     #{createdTime},
+                    #{updatedTime})
+    </insert>
+
+    <update id="updateCrawlerDataType" parameterType="cn.kgc.beans.CrawlerDataType">
+        update crawler_data_type
+        <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+                        <if test="typeName != null and typeName!='-1'">
+                            typeName=#{typeName},
+                        </if>
+                        <if test="stopWord != null and stopWord!='-1'">
+                            stopWord=#{stopWord},
+                        </if>
+                        <if test="extWord != null and extWord!='-1'">
+                            extWord=#{extWord},
+                        </if>
+                        <if test="createdTime != null and createdTime!='-1'">
+                            createdTime=#{createdTime},
+                        </if>
+                        <if test="updatedTime != null and updatedTime!='-1'">
+                            updatedTime=#{updatedTime}
+                        </if>
+        </trim>
+    </update>
+
+    <delete id="deleteCrawlerDataTypeById" parameterType="Long">
+        delete from crawler_data_type where id = #{id}
+    </delete>
+
+    <delete id="batchDeleteCrawlerDataType" parameterType="java.util.Map">
+        delete from crawler_data_type where id in (
+            <foreach collection="ids" item="id" separator=",">
+                    #{id}
+            </foreach>
+        )
+    </delete>
+</mapper>

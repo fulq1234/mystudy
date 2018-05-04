@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kgc.dao.crawlerNode.CrawlerNodeMapper">
+
+    <select id="getCrawlerNodeById" resultType="cn.kgc.beans.CrawlerNode" >
+        select
+                id as id,
+                name as name,
+                type as type,
+                parent as parent,
+                level as level,
+                hasNext as hasNext,
+                saveCloumn as saveCloumn,
+                classReg as classReg,
+                startStr as startStr,
+                endStr as endStr,
+                resultType as resultType,
+                position as position,
+                selfPosition as selfPosition,
+                isHref as isHref,
+                reg as reg,
+                ruleId as ruleId,
+                createdTime as createdTime,
+                updatedTime as updatedTime
+        from crawler_node
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="id != null">
+                and id=#{id}
+            </if>
+        </trim>
+    </select>
+
+    <select id="getCrawlerNodeListByMap" resultType="cn.kgc.beans.CrawlerNode" parameterType="java.util.Map">
+        select
+                id as id,
+                name as name,
+                type as type,
+                parent as parent,
+                level as level,
+                hasNext as hasNext,
+                saveCloumn as saveCloumn,
+                classReg as classReg,
+                startStr as startStr,
+                endStr as endStr,
+                resultType as resultType,
+                position as position,
+                selfPosition as selfPosition,
+                isHref as isHref,
+                reg as reg,
+                ruleId as ruleId,
+                createdTime as createdTime,
+                updatedTime as updatedTime
+        from crawler_node
+        <trim prefix="where" prefixOverrides="and | or">
+                <if test="id != null and id!=-1">
+                    and id=#{id}
+                </if>
+                <if test="name != null and name!=-1">
+                    and name=#{name}
+                </if>
+                <if test="type != null and type!=-1">
+                    and type=#{type}
+                </if>
+                <if test="parent != null and parent!=-1">
+                    and parent=#{parent}
+                </if>
+                <if test="level != null and level!=-1">
+                    and level=#{level}
+                </if>
+                <if test="hasNext != null and hasNext!=-1">
+                    and hasNext=#{hasNext}
+                </if>
+                <if test="saveCloumn != null and saveCloumn!=-1">
+                    and saveCloumn=#{saveCloumn}
+                </if>
+                <if test="classReg != null and classReg!=-1">
+                    and classReg=#{classReg}
+                </if>
+                <if test="startStr != null and startStr!=-1">
+                    and startStr=#{startStr}
+                </if>
+                <if test="endStr != null and endStr!=-1">
+                    and endStr=#{endStr}
+                </if>
+                <if test="resultType != null and resultType!=-1">
+                    and resultType=#{resultType}
+                </if>
+                <if test="position != null and position!=-1">
+                    and position=#{position}
+                </if>
+                <if test="isHref != null and isHref!=-1">
+                    and isHref=#{isHref}
+                </if>
+                <if test="reg != null and reg!=-1">
+                    and reg=#{reg}
+                </if>
+                <if test="ruleId != null and ruleId!=-1">
+                    and ruleId=#{ruleId}
+                </if>
+                <if test="createdTime != null and createdTime!=-1">
+                    and createdTime=#{createdTime}
+                </if>
+                <if test="updatedTime != null and updatedTime!=-1">
+                    and updatedTime=#{updatedTime}
+                </if>
+        </trim>
+        <if test="beginPos != null and pageSize != null ">
+            limit #{beginPos},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getCrawlerNodeCountByMap" resultType="Integer"  parameterType="java.util.Map">
+        select count(*) from crawler_node
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="id != null and id!=-1">
+                and id=#{id}
+            </if>
+            <if test="name != null and name!=-1">
+                and name=#{name}
+            </if>
+            <if test="type != null and type!=-1">
+                and type=#{type}
+            </if>
+            <if test="parent != null and parent!=-1">
+                and parent=#{parent}
+            </if>
+            <if test="level != null and level!=-1">
+                and level=#{level}
+            </if>
+            <if test="hasNext != null and hasNext!=-1">
+                and hasNext=#{hasNext}
+            </if>
+            <if test="saveCloumn != null and saveCloumn!=-1">
+                and saveCloumn=#{saveCloumn}
+            </if>
+            <if test="classReg != null and classReg!=-1">
+                and classReg=#{classReg}
+            </if>
+            <if test="startStr != null and startStr!=-1">
+                and startStr=#{startStr}
+            </if>
+            <if test="endStr != null and endStr!=-1">
+                and endStr=#{endStr}
+            </if>
+            <if test="resultType != null and resultType!=-1">
+                and resultType=#{resultType}
+            </if>
+            <if test="position != null and position!=-1">
+                and position=#{position}
+            </if>
+            <if test="isHref != null and isHref!=-1">
+                and isHref=#{isHref}
+            </if>
+            <if test="reg != null and reg!=-1">
+                and reg=#{reg}
+            </if>
+            <if test="ruleId != null and ruleId!=-1">
+                and ruleId=#{ruleId}
+            </if>
+            <if test="createdTime != null and createdTime!=-1">
+                and createdTime=#{createdTime}
+            </if>
+            <if test="updatedTime != null and updatedTime!=-1">
+                and updatedTime=#{updatedTime}
+            </if>
+        </trim>
+    </select>
+
+    <insert id="insertCrawlerNode" parameterType="cn.kgc.beans.CrawlerNode">
+        insert into crawler_node(
+                name,
+                type,
+                parent,
+                level,
+                hasNext,
+                saveCloumn,
+                classReg,
+                startStr,
+                endStr,
+                resultType,
+                position,
+                isHref,
+                reg,
+                ruleId,
+                selfPosition,
+                createdTime,
+                updatedTime)
+        values(
+                 #{name},
+                 #{type},
+                 #{parent},
+                 #{level},
+                 #{hasNext},
+                 #{saveCloumn},
+                 #{classReg},
+                 #{startStr},
+                 #{endStr},
+                 #{resultType},
+                 #{position},
+                 #{isHref},
+                 #{reg},
+                 #{ruleId},
+                 #{selfPosition},
+                 #{createdTime},
+                 #{updatedTime})
+    </insert>
+
+    <update id="updateCrawlerNode" parameterType="cn.kgc.beans.CrawlerNode">
+        update crawler_node
+        <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+            <if test="name != null and name!='-1'">
+                name=#{name},
+            </if>
+            <if test="type != null and type!='-1'">
+                type=#{type},
+            </if>
+            <if test="parent != null and parent!='-1'">
+                parent=#{parent},
+            </if>
+            <if test="level != null and level!='-1'">
+                level=#{level},
+            </if>
+            <if test="hasNext != null and hasNext!='-1'">
+                hasNext=#{hasNext},
+            </if>
+            <if test="saveCloumn != null and saveCloumn!='-1'">
+                saveCloumn=#{saveCloumn},
+            </if>
+            <if test="classReg != null and classReg!='-1'">
+                classReg=#{classReg},
+            </if>
+            <if test="startStr != null and startStr!='-1'">
+                startStr=#{startStr},
+            </if>
+            <if test="endStr != null and endStr!='-1'">
+                endStr=#{endStr},
+            </if>
+            <if test="resultType != null and resultType!='-1'">
+                resultType=#{resultType},
+            </if>
+            <if test="position != null and position!='-1'">
+                position=#{position},
+            </if>
+            <if test="isHref != null and isHref!='-1'">
+                isHref=#{isHref},
+            </if>
+            <if test="reg != null and reg!='-1'">
+                reg=#{reg},
+            </if>
+            <if test="ruleId != null and ruleId!='-1'">
+                ruleId=#{ruleId},
+            </if>
+            <if test="selfPosition != null and selfPosition!='-1'">
+                selfPosition=#{selfPosition},
+            </if>
+            <if test="createdTime != null and createdTime!='-1'">
+                createdTime=#{createdTime},
+            </if>
+            <if test="updatedTime != null and updatedTime!='-1'">
+                updatedTime=#{updatedTime}
+            </if>
+        </trim>
+    </update>
+
+    <delete id="deleteCrawlerNodeById" parameterType="Long">
+        delete from crawler_node where id = #{id}
+    </delete>
+
+    <delete id="batchDeleteCrawlerNode" parameterType="java.util.Map">
+        delete from crawler_node where id in (
+            <foreach collection="ids" item="id" separator=",">
+                    #{id}
+            </foreach>
+        )
+    </delete>
+</mapper>

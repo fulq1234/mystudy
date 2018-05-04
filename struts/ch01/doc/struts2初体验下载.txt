@@ -1,0 +1,192 @@
+struts2开发程序的基本步骤
+1.加载struts2类库
+2.配置web.xml
+<filter>
+	<filter-name>struts2</filter-name>
+	<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+</filter>
+<filter-mapping>
+	<filter-name>struts2</filter-name>
+	<url-pattern>/*</url-pattern><!-- 将全部请求定位到指定的过滤器 -->
+</filter-mapping>
+3.开发视图层页面
+<%@taglib prefix="s" uri="/struts-tags" %>
+<div>
+	<h1><s:property value="message"/><!-- 输出显示语句 --></h1>
+</div>
+<div>
+	<form action="login.action" method="post">
+		请输入您的姓名：
+		<input name="name" type="text"><br/>
+		请输入您的密码
+		<input name="password" type="password"/><br/>
+		<input type="submit" value="提交"/>
+	</form>
+</div>
+4.开发控制层Action
+import com.opensymphony.xwork2.Action;
+import com.opensymphony.xwork2.ActionContext;
+public class LoginAction implements Action {
+	private String name = "";
+	private String password = "";		
+	@Override
+	public String execute() throws Exception {
+		// TODO Auto-generated method stub
+		//保存参数到session
+		Map<String,Object> session = ActionContext.getContext().getSession();
+		session.put("name", name);//在前台显示${sessionScope.name}		
+		if(name.equals("jason") && password.equals("2010")){
+			return "success";
+		}else{
+			return "fail";
+		}
+	}
+	//... ...getter/setter方法
+}
+5.配置struts.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<!-- 创建一个default包，继承自Struts2的struts-default包 -->
+	<package name="default" namespace="/" extends="struts-default">
+		<!-- 接收处理用户的/helloWorld.action请求 ，
+			 并根据返回结果，完成跳转 -->
+		<action name="helloWorld" class="cn.intro.action.HelloWorldAction"><!-- name对应form表单的action属性值 -->
+			<result name="success">/helloWorld.jsp</result><!-- success对应Action返回字符串 -->
+		</action>
+		<action name="login" class="cn.intro.action.LoginAction"><!-- name对应form表单的action属性值 -->
+			<result name="success">/success.jsp</result><!-- success对应Action返回字符串 -->
+			<result name="fail">/fail.jsp</result>
+		</action>
+	</package>
+</struts>
+6.部署，运行项目
+
+
+struts2访问Servlet API
+1.解耦
+2.耦合
+
+1.解耦
+对Servlet API进行封装
+    提供了三个Map对象访问，分别对应request,session,application作用域
+通过ActionContext类获取这三个Map对象
+(1) Object get("request")
+(2) Map getSession()
+(3) Map getApplication()
+
+Map<String,Object> session = ActionContext.getContext().getSession();
+session.put(CURRENT_USER,name);
+页面显示${sessionScope.CURRENT_USER}
+
+于Session耦合的访问方式
+通过ServletActionContext来获取Servlet API对象
+1.ServletContext getServletContext()
+2.HttpServletResponse getResponse()
+3.HttpServletRequest getRequest()
+4.通过request.getSession()获取session对象
+通过xxx.setAttribute()和xxx.getAttribute()
+
+HttpSession session = ServletActionContext.getRequest().getSession();
+session.setAttribute(CURRENT_USER,name);
+
+
+Struts 2数据校验
+validate()拦截方法
+public class LoginAction extends ActionSupport{
+	//... ...省略代码
+	public void validate(){
+		if(this.getUsername().length() == 0){
+			addFieldError("name","用户名不能为空");
+		}
+		if(this.getPassword().length() ==0){
+			addFieldError("pwd","用户密码不能为空");
+		}
+	}
+	//... ...省略代码
+}
+只要继承了ActionSupport，并且写了validate方法，那么就会在execute方法前执行validate方法。如果发现错误（addFieldError），那么都返回一个"input"视图，这个视图是必须执行的。否则继续执行后续方法。
+如果将校验错误信息在页面输出？
+在视图页面使用struts2提供的标签
+1.fielderror
+2.actionerror
+<%@taglib prefix="s" uri="/struts-tags"%>
+<s:fielderror/>
+<s:fielderror fieldName="name"/>
+
+
+struts2 UI标签
+UI标签，常用表单标签(ognl)
+<s:form>...</s:form> 表单标签
+<s:textfield>...</s:textfield> 文本输入框
+<s:password>...</s:password>  密码输入框
+<s:textarea>...</s:textarea>   文本框输入框
+<s:radio>...</s:radio> 单选按钮
+<s:checkbox>...</s:checkbox>  多选框
+<s:select/>  下拉选项框
+<s:submit/>   提交标签
+<s:reset/>   重置标签
+<s:hidden/>  隐藏域标签
+支持主题风格
+
+和普通的html相比，是ongl表达式。
+<s:form action="login.action" method="post">
+	<s:textfield name="name" value="xx" label="用户名"></s:textfield>
+	<s:password name="password" label="密码"></s:password>
+	<s:submit value="提交"/>
+</s:form>
+label是选项名称,theme是主题,默认主题是simple,其它的举例xhtml
+
+UI标签，常用非表单标签
+<s:actionerror/>  显示Action错误
+<s:actionmessage/>  显示Action消息
+<s:fielderror/>  显示字段错误
+ctrl+alt+T 查找jar包中的类
+
+通用标签
+条件标签
+<s:if>... ...</s:if>
+<s:elseif>... ...</s:elseif>
+<s:else>... ...</s:else>
+迭代标签
+<s:iterator>... ...</s:iterator>
+
+<s:if test="表达式">
+	需要执行的代码
+</s:if>
+<s:elseif test="表达式">
+	需要执行的代码
+</s:elseif>
+<s:else>
+	需要执行的代码
+</s:else>
+
+比如
+<s:if test="sex==1">先生</s:if>
+
+<s:iterator value="集合对象" status="status" id="name">
+	读取集合对象并输出显示
+</s:iterator>
+value属性：需要进行遍历的集合对象
+status属性：当前迭代元素的IteratorStatus实例
+id属性：当前迭代元素的id,可直接访问元素，该参数可选
+
+举例:
+<s:iterator value="users" status="st">
+	<s:property value="user"><br/>
+	<!--也可以 为什么可以输出user那？因为属性都被放到了一个值栈里，s:property取第一个元素 -->
+	<s:property/>
+</s:iterator>
+
+通用标签,常用数据标签
+property  输出ongl表达式的值
+debug   用于调试，可查看ActionContext中的内容
+action  允许在JSP页面中直接调用Action
+bean   用于实例化一个JavaBean对象
+include  类似JSP中<jsp:include>标签
+param   作为其它标签的子标签
+push   将值压入值栈顶
+set 对指定范围(request,session... ...)的变量赋值
+url  用于创建一个URL

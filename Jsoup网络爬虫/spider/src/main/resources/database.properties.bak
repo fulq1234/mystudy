@@ -1,0 +1,11 @@
+mysql.driver=com.mysql.jdbc.Driver
+mysql.url=jdbc:mysql://127.0.0.1:3306/spider?useUnicode=true&characterEncoding=utf-8
+mysql.user=root
+mysql.password=dayouqingteng_tengqingyouda
+mysql.minIdle=45
+mysql.maxIdle=50
+mysql.initialSize=5
+mysql.maxActive=100
+mysql.maxWait=100
+mysql.removeAbandonedTimeout=180
+mysql.removeAbandoned=true

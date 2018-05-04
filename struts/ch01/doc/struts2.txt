@@ -1,0 +1,13 @@
+
+Action
+method属性
+默认值:execute
+更改属性值实现Action中不同方法的调用
+<action name="login" class="cn.UserAction" method="login">
+... ...
+</action>
+
+<action name="register" class="cn.UserAction" method="register">
+... ...
+</action>
+

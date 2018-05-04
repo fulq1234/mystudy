@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kgc.dao.crawlerTask.CrawlerTaskMapper">
+
+    <select id="getCrawlerTaskById" resultType="cn.kgc.beans.CrawlerTask" >
+        select
+            id as id,
+            taskName as taskName,
+            ruleId as ruleId,
+            url as url,
+            startPage as startPage,
+            endPage as endPage,
+            dataType as dataType,
+            threadCount as threadCount,
+            dataProgress as dataProgress,
+            keywordProgress as keywordProgress,
+            dataCounts as dataCounts,
+            keywordCounts as keywordCounts,
+            totalCount as totalCount,
+            description as description,
+            createdTime as createdTime,
+            updatedTime as updatedTime,
+            isNeedPage as isNeedPage,
+            keyword as keyword,
+            status as status
+        from crawler_task
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="id != null">
+                and id=#{id}
+            </if>
+        </trim>
+    </select>
+
+    <select id="getCrawlerTaskListByMap" resultType="cn.kgc.vo.CrawlerTaskVo" parameterType="java.util.Map">
+        select
+            ct.id as id,
+            ct.taskName as taskName,
+            ct.ruleId as ruleId,
+            ct.url as url,
+            ct.startPage as startPage,
+            ct.endPage as endPage,
+            ct.dataType as dataType,
+            cdt.typeName as typeName,
+            ct.threadCount as threadCount,
+            ct.dataProgress as dataProgress,
+            ct.keywordProgress as keywordProgress,
+            ct.dataCounts as dataCounts,
+            ct.keywordCounts as keywordCounts,
+            ct.totalCount as totalCount,
+            ct.description as description,
+            ct.isNeedPage as isNeedPage,
+            ct.keyword as keyword,
+            ct.createdTime as createdTime,
+            ct.updatedTime as updatedTime,
+            cr.ruleName as ruleName,
+            ct.status as status
+        from crawler_task ct
+          LEFT JOIN crawler_rules cr ON ct.ruleId=cr.id
+          left join crawler_data_type cdt on ct.dataType=cdt.id
+        <trim prefix="where" prefixOverrides="and | or">
+                <if test="id != null and id!=-1">
+                    and ct.id=#{id}
+                </if>
+                <if test="taskName != null and taskName!='-1'">
+                    and ct.taskName like concat('%',#{taskName},'%')
+                </if>
+                <if test="ruleId != null and ruleId!=-1">
+                    and ct.ruleId=#{ruleId}
+                </if>
+                <if test="status != null and status!=-1">
+                    and ct.status=#{status}
+                </if>
+        </trim>
+        <if test="beginPos != null and pageSize != null ">
+            limit #{beginPos},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getCrawlerTaskCountByMap" resultType="Integer"  parameterType="java.util.Map">
+        select count(*) from crawler_task ct
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="id != null and id!=-1">
+                and ct.id=#{id}
+            </if>
+            <if test="taskName != null and taskName!='-1'">
+                and ct.taskName like concat('%',#{taskName},'%')
+            </if>
+            <if test="ruleId != null and ruleId!=-1">
+                and ct.ruleId=#{ruleId}
+            </if>
+            <if test="status != null and status!=-1">
+                and ct.status=#{status}
+            </if>
+            <if test="createdTime != null and createdTime!=-1">
+                and createdTime=#{createdTime}
+            </if>
+            <if test="updatedTime != null and updatedTime!=-1">
+                and updatedTime=#{updatedTime}
+            </if>
+        </trim>
+    </select>
+
+    <insert id="insertCrawlerTask" parameterType="cn.kgc.beans.CrawlerTask">
+        insert into crawler_task(
+                taskName,
+                ruleId,
+                url,
+                startPage,
+                endPage,
+                threadCount,
+                dataProgress,
+                keywordProgress,
+                dataCounts,
+                keywordCounts,
+                totalCount,
+                description,
+                dataType,
+                keyword,
+                isNeedPage,
+                createdTime,
+                updatedTime)
+        values(
+                 #{taskName},
+                 #{ruleId},
+                 #{url},
+                 #{startPage},
+                 #{endPage},
+                 #{threadCount},
+                 #{dataProgress},
+                 #{keywordProgress},
+                 #{dataCounts},
+                 #{keywordCounts},
+                 #{totalCount},
+                 #{description},
+                 #{dataType},
+                 #{keyword},
+                 #{isNeedPage},
+                 #{createdTime},
+                 #{updatedTime})
+    </insert>
+
+    <update id="updateCrawlerTask" parameterType="cn.kgc.beans.CrawlerTask">
+        update crawler_task
+        <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+            <if test="taskName != null and taskName!='-1'">
+                taskName=#{taskName},
+            </if>
+            <if test="ruleId != null and ruleId!='-1'">
+                ruleId=#{ruleId},
+            </if>
+            <if test="url != null and url!='-1'">
+                url=#{url},
+            </if>
+            <if test="startPage != null and startPage!='-1'">
+                startPage=#{startPage},
+            </if>
+            <if test="endPage != null and endPage!='-1'">
+                endPage=#{endPage},
+            </if>
+            <if test="threadCount != null and threadCount!='-1'">
+                threadCount=#{threadCount},
+            </if>
+            <if test="description != null and description!='-1'">
+                description=#{description},
+            </if>
+            <if test="keyword != null and keyword!='-1'">
+                keyword=#{keyword},
+            </if>
+            <if test="isNeedPage != null and isNeedPage!='-1'">
+                isNeedPage=#{isNeedPage},
+            </if>
+            <if test="dataType != null and dataType!=-1">
+                dataType=#{dataType},
+            </if>
+            <if test="dataProgress != null and dataProgress!='-1'">
+                dataProgress=#{dataProgress},
+            </if>
+            <if test="keywordProgress != null and keywordProgress!='-1'">
+                keywordProgress=#{keywordProgress},
+            </if>
+
+            <if test="dataCounts != null and dataCounts!='-1'">
+                dataCounts=#{dataCounts},
+            </if>
+            <if test="keywordCounts != null and keywordCounts!='-1'">
+                keywordCounts=#{keywordCounts},
+            </if>
+            <if test="totalCount != null and totalCount!='-1'">
+                totalCount=#{totalCount},
+            </if>
+            <if test="status != null and status!=-1">
+                status=#{status},
+            </if>
+        </trim>
+    </update>
+
+    <delete id="deleteCrawlerTaskById" parameterType="Long">
+        delete from crawler_task where id = #{id}
+    </delete>
+
+    <delete id="batchDeleteCrawlerTask" parameterType="java.util.Map">
+        delete from crawler_task where id in (
+            <foreach collection="ids" item="id" separator=",">
+                    #{id}
+            </foreach>
+        )
+    </delete>
+</mapper>
