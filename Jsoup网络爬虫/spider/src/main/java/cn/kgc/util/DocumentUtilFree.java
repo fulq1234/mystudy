@@ -39,8 +39,8 @@ public static Document getDocument(String url){
     		connection.proxy(proxyIp.getIp(),proxyIp.getPort());
     		document = connection.get();
     	}catch(IOException e){
+           // e.printStackTrace();
     		return setProxyIp(connection);
-            
         }
         return document;  
     	

@@ -11,3 +11,39 @@ method属性
 ... ...
 </action>
 
+配置默认Action
+1.没有Action匹配请求时，默认Action将被执行
+2.通过<default-action-ref ... />元素配置默认Action
+<struts>
+  <package name="default" extends="struts-default">
+      <default-action-ref name="defaultAction"/>
+      <action name="defaultAction"><!--省略class属性，将使用ActionSupport类。并且两个“defaultAction”必须能对应上-->
+          <result>error.jsp</result>
+      </action>
+  </package>
+</struts>
+
+
+动态方法调用
+作用：减少Action数量
+使用: actionName!methodName.action
+禁用: 将属性struts.enable.DynamicMethodInvocation设置false
+
+public class UserAction{
+   ...
+   public String login(){...}
+   public String register(){...}
+}
+<action name="user" class="cn.UserAction">
+	<result name="login">/login.jsp</result>
+	<result name="register">/register.jsp</result>
+</action>
+调用方法user!login.action调用UserAction的login()方法
+
+简化Action配置另一种形式的动态方法调用（使用通配符*）
+<action name="*User" class="cn.UserAction" method="{1}">
+   <result>/page/{1}_success.jsp</result>
+   <result name="input">/page/{1}.jsp</result>
+</action>
+解释。如果*是add,{1}就是add
+

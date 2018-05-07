@@ -47,6 +47,9 @@ public class ProxyUtilsFree {
 				ProxyIp pp = new ProxyIp();  
 	            pp.setPort(Integer.parseInt(port));  
 	            pp.setIp(ip);  
+	            System.out.println(ip + "\t" +port);
+	            
+	            currentIpIndex ++;
 				return pp;
 			//}
 		} catch (IOException e) {
