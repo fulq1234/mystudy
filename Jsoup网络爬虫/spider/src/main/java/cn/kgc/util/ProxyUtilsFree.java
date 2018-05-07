@@ -55,6 +55,7 @@ public class ProxyUtilsFree {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			currentIpIndex ++;
 		}
 		
 		return null;

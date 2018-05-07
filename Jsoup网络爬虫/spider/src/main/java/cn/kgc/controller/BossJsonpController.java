@@ -1,10 +1,8 @@
 package cn.kgc.controller;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -46,24 +44,25 @@ public class BossJsonpController {
 						Document document = DocumentUtilFree.getDocument(listUrl);//Jsoup.connect(listUrl).get();
 						String selector = "h3[class=name]>a";
 						Elements elements = document.select(selector);
-						for(int i = 0;i<elements.size();i++){
-							Element e = elements.get(0);//职位标题
-							String title = e.text();
+						/*for(int i = 0;i<elements.size();i++){
 							
-							
-							
-							//插入数据
-							Recruit recruit = new Recruit();
-							recruit.setTitle(title);
-							
-							recruit.setTaskId(1);
-							recruit.setDataType(1);
-							try {
-								recruitService.itriptxAddRecruit(recruit);
-							} catch (Exception e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
+						}*/
+						Element e = elements.get(0);//职位标题
+						String title = e.text();
+						
+						
+						
+						//插入数据
+						Recruit recruit = new Recruit();
+						recruit.setTitle(title);
+						
+						recruit.setTaskId(1);
+						recruit.setDataType(1);
+						try {
+							recruitService.itriptxAddRecruit(recruit);
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
 						
 						
