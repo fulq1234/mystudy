@@ -53,4 +53,16 @@
 			<result>common.jsp</result>
 		</action>
 	</package>
+	
+	<package name="ognl" namespace="/" extends="struts-default">
+		<action name="showOriginal" class="cn.intro.action.ShowOriginalAndJavaBeanAction">
+			<result>result.jsp</result>
+		</action>
+		<action name="ArraysDataTransfer" class="cn.intro.action.ArraysDataTransferAction">
+			<result name="success">result2.jsp</result>
+		</action>
+		<action name="listDataTransfer" class="cn.intro.action.ListDataTransferAction">
+			<result>result2.jsp</result>
+		</action>
+	</package>
 </struts>
