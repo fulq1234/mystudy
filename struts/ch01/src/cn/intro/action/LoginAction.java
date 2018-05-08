@@ -2,6 +2,10 @@ package cn.intro.action;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.struts2.ServletActionContext;
+
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -28,6 +32,10 @@ public class LoginAction extends ActionSupport {
 		//保存参数到session
 		Map<String,Object> session = ActionContext.getContext().getSession();
 		session.put("name", name);//在前台显示${sessionScope.name}
+		
+		HttpSession session2 = ServletActionContext.getRequest().getSession();
+		session2.setAttribute("name", name);
+		
 		
 		if(name.equals("jason") && password.equals("2010")){
 			return "success";

@@ -20,9 +20,10 @@
 		<input name="password" type="password"/><br/>
 		<input type="submit" value="提交"/>
 	</form> -->
-	<s:form action="login.action" method="post" theme="xhtml">
+	<s:form action="doLogin.action" method="post" theme="xhtml">
 		<s:textfield name="name" value="xx" label="用户名"></s:textfield>
 		<s:password name="password" label="密码"></s:password>
+		<s:checkbox name="manager" label="管理员登录"/>
 		<s:submit value="提交"/>
 	</s:form>
 	

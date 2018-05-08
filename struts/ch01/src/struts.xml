@@ -3,10 +3,16 @@
     "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
     "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
+	<!-- 启用动态方法调用 -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="true"/>
 	<!-- 创建一个default包，继承自Struts2的struts-default包 -->
 	<package name="default" namespace="/" extends="struts-default">
 		<!-- 接收处理用户的/helloWorld.action请求 ，
 			 并根据返回结果，完成跳转 -->
+		<default-action-ref name="defaultA"></default-action-ref>
+		<action name="defaultA">
+			<result>/fail.jsp</result>
+		</action>
 		<action name="helloWorld" class="cn.intro.action.HelloWorldAction"><!-- name对应form表单的action属性值 -->
 			<result name="success">/helloWorld.jsp</result><!-- success对应Action返回字符串 -->
 		</action>
@@ -14,6 +20,37 @@
 			<result name="success">/success.jsp</result><!-- success对应Action返回字符串 -->
 			<result name="fail">/fail.jsp</result>
 			<result name="input">/login.jsp</result><!-- 输出，如果验证错误，就到input视图 -->
+		</action>
+	</package>
+	
+	<package name="user" namespace="/" extends="struts-default">
+		<!-- <action name="login" class="cn.intro.action.UserAction" method="login">
+			<result name="alogin">/login.jsp</result>
+		</action>
+		<action name="register" class="cn.intro.action.UserAction" method="register">
+			<result name="aregister">/register.jsp</result>
+		</action> -->
+		<!-- <action name="user" class="cn.intro.action.UserAction">
+			<result name="alogin">/login.jsp</result>
+			<result name="aregister">/register.jsp</result>
+		</action> -->
+		
+		<action name="*User" class="cn.intro.action.UserAction" method="{1}">
+			<result>{1}_success.jsp</result>
+			<result name="input" type="redirect">{1}.jsp</result>
+		</action>
+		
+		<!-- 演示动态结果 -->
+		<action name="doLogin" class="cn.intro.action.UserAction" method="doLogin">
+			<result type="redirectAction">${nextDispose}</result>
+		</action>
+		
+		<action name="manager">
+			<result>manager.jsp</result>
+		</action>
+		
+		<action name="common">
+			<result>common.jsp</result>
 		</action>
 	</package>
 </struts>

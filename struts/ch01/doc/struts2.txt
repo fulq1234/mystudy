@@ -1,8 +1,57 @@
+一.Struts2基本架构
+二.Struts2配置文件
+三.配置Action
+四.动态方法调用
+五.配置Result
+
+struts.xml
+1.核心配置文件，主要负责管理Action
+2.通常放在WEB-INF/classes，在该目录下面struts.xml可以被自动加载
+<struts>
+  <constant name="" value=""/><!--常量-->
+  <package name="" namespace="" extends="">
+    <action name="" class="">
+       <result name=""></result>
+    </action>
+  </package>
+</struts>
+
+constant元素
+1.配置常量，可以改变Struts2框架的一些行为
+2.name属性表示常量名称，value属性表示常量值
+struts2-core-2.3.34.jar /org/apache/struts2/default.properties
+
+package元素
+1.包的作用：简化维护工作，提高重用性
+2.包可以“继承”已定义的包，并可以添加自己包的配置
+3.name属性为必需的且唯一，用于指定包的名称
+4.extends属性指定要扩展的包
+5.namespace属性定义该包中action的命名空间，可选
+
+除非有令人信服原因，自定义的包应该总是扩展struts-default包
+Action在同一个包(package)里面，是不能同名的。
+namespace是访问路径的前缀。
+<package name="default" namespace="/user" extends="struts-default">
+   <action name="helloworld" class="cn.HelloWorld">
+       <result name="success">/helloWorld.jsp</result>
+   </action>
+</package>
+
+1.struts-default.xml
+  Struts2默认配置文件，会自动加载
+  struts-default包在struts-default.xml文件中定义
+2.struts-plugin.xml
+  Struts2 插件使用的配置文件
+ 
 
 Action
+Action的作用
+1.封装工作单元
+2.数据转移的场所
+3.返回结果字符串
 method属性
-默认值:execute
-更改属性值实现Action中不同方法的调用
+1.默认值:execute
+2.更改属性值实现Action中不同方法的调用
 <action name="login" class="cn.UserAction" method="login">
 ... ...
 </action>
@@ -47,3 +96,25 @@ public class UserAction{
 </action>
 解释。如果*是add,{1}就是add
 
+Result常用结果类型
+1.dispatcher:默认结果类型，后台使用RequestDispatcher转发请求
+2.redirect:后台使用的sendRedirect()将请求重定向至指定的URL
+3.redirectAction:主要用于重定向到Action
+<action name="*User" class="cn.UserAction" method="{1}">
+   <result name="input">/page/{1}.jsp</result>
+   <result type="redirect">/page/{1}_success.jsp</result>
+</action>
+
+${nextDispose}表示调用Action的getNextDispose()的方法。获取学员的方法。
+
+全局结果
+实现同一个包中多个action共享一个结果
+<struts>
+  <package name="default" extends="struts-default">
+  <global-results>
+	<result name="error">/page/error.jsp</result>
+	<result name="login" type="redirect">/page/login.jsp</result>
+  </global-results>
+  ...省略action的配置...
+  </package>
+</struts>
