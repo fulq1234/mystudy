@@ -32,8 +32,8 @@ public class BossJsonpController {
 		String url = "https://www.zhipin.com/c101010100/h_101010100/?query=java&page=temp&ka=page-temp";
 		
 		ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);//创建一个定长线程池，可控制线程最大并发数，超过的线程会在队列中等待。
-		for(int i = 0;i<50;i++){//爬几页
-			final String listUrl = url.replaceAll("temp", (i+1) + "");
+		for(int pageii = 0;pageii<50;pageii++){//爬几页
+			final String listUrl = url.replaceAll("temp", (pageii+1) + "");
 			fixedThreadPool.execute(new Runnable(){
 
 				@Override

@@ -1,4 +1,4 @@
-package cn.kgc.controller;
+package cn.itrip.test;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
@@ -8,35 +8,27 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.junit.Test;
 
 import cn.kgc.beans.Recruit;
-import cn.kgc.service.recruit.RecruitService;
 
-/**
- * 智联招聘
- * @author Administrator
- *
- */
-@Controller
-@RequestMapping("/zhilian")
-public class ZhiLianController {
+public class JsoupTest {
+
+	public static void main(String[] args) {
+		zhiLianTest();//智联招聘
+	}
 	
-	@Autowired
-	private RecruitService recruitService;
-	
-	@ResponseBody
-	@RequestMapping("/spider")
-	public String spider(){	
+	/**
+	 * 智联招聘
+	 */
+	public static void zhiLianTest(){
 		String url = "http://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E9%80%89%E6%8B%A9%E5%9C%B0%E5%8C%BA&kw=java&isadv=0&sg=172c6d7dcafe4755ad7cec36bd1d3683&p=temp";
 		
 		//创建一个定长线程池，可控制线程最大并发数，超过的线程会在队列中等待。
 		ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
 		for(int pageii = 0;pageii<50;pageii++){//爬几页
 			final String listUrl = url.replaceAll("temp", (pageii+1) + "");
+			final int page = pageii + 1;
 			fixedThreadPool.execute(new Runnable(){
 
 				@Override
@@ -86,25 +78,16 @@ public class ZhiLianController {
 								}
 							}
 							//插入数据
-							Recruit recruit = new Recruit();
-							recruit.setTitle(zwmc);
-							recruit.setCompanyName(gsmc);
-							recruit.setMonthlySalary(zwyx);
-							recruit.setCompanyAddress(gzdd);
-							recruit.setTaskId(1);
-							recruit.setDataType(1);
-							recruit.setStatus(0);
-							recruit.setCompanyType(companyType);//不能为空
-							recruit.setCompanyUrl(companyUrl);
-							recruit.setDetailUrl(detailurl);
-							recruit.setJobDescription(jobDescription);
-							try {
-								recruitService.itriptxAddRecruit(recruit);
-							} catch (Exception e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-							//System.out.println(zwmc + "/t" + gsmc + "/t" + zwyx +"/t" + gzdd);
+							System.out.println("page"+page+"i"+i+"title:" + zwmc);
+							System.out.println("page"+page+"i"+i+"companyname:"+gsmc);
+							System.out.println("page"+page+"i"+i+"monthsalary:"+zwyx);
+							System.out.println("page"+page+"i"+i+"companyaddress:"+gzdd);
+							System.out.println("page"+page+"i"+i+"companyType:"+companyType);
+							System.out.println("page"+page+"i"+i+"companyUrl:"+companyUrl);
+							System.out.println("page"+page+"i"+i+"detailurl:"+detailurl);
+							System.out.println("page"+page+"i"+i+"jobDescription:"+jobDescription);
+							
+							
 						}
 						
 						
@@ -116,9 +99,9 @@ public class ZhiLianController {
 				
 			});
 		}
-		return "success";
 		
 	}
+	
 	
 	
 }
