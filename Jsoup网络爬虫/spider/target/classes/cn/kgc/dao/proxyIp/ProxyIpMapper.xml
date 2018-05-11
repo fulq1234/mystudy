@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kgc.dao.proxyIp.ProxyIpMapper">
+
+    <select id="getProxyIpById" resultType="cn.kgc.beans.ProxyIp" >
+        select
+                id as id,
+                ip as ip,
+                port as port,
+                website as website,
+                creatdTime as creatdTime,
+                updatedTime as updatedTime,
+                testCheck as testCheck,
+                testSelect as testSelect,
+                status as status
+        from proxy_ip
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="id != null">
+                and id=#{id}
+            </if>
+        </trim>
+    </select>
+
+    <select id="getProxyIpListByMap" resultType="cn.kgc.beans.ProxyIp" parameterType="java.util.Map">
+        select
+                id as id,
+                ip as ip,
+                port as port,
+                website as website,
+                creatdTime as creatdTime,
+                updatedTime as updatedTime,
+                testCheck as testCheck,
+                testSelect as testSelect,
+                status as status
+        from proxy_ip
+        <trim prefix="where" prefixOverrides="and | or">
+                <if test="id != null and id!=-1">
+                    and id=#{id}
+                </if>
+                <if test="ip != null and ip!=-1">
+                    and ip=#{ip}
+                </if>
+                <if test="port != null and port!=-1">
+                    and port=#{port}
+                </if>
+                <if test="website != null and website!=-1">
+                    and website=#{website}
+                </if>
+                <if test="creatdTime != null and creatdTime!=-1">
+                    and creatdTime=#{creatdTime}
+                </if>
+                <if test="updatedTime != null and updatedTime!=-1">
+                    and updatedTime=#{updatedTime}
+                </if>
+                <if test="testCheck != null and testCheck!=-1">
+                    and testCheck=#{testCheck}
+                </if>
+                <if test="testSelect != null and testSelect!=-1">
+                    and testSelect=#{testSelect}
+                </if>
+                <if test="status != null and status!=-1">
+                    and status=#{status}
+                </if>
+        </trim>
+        <if test="beginPos != null and pageSize != null ">
+            limit #{beginPos},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getProxyIpCountByMap" resultType="Integer"  parameterType="java.util.Map">
+        select count(*) from proxy_ip
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="id != null and id!=-1">
+                and id=#{id}
+            </if>
+            <if test="ip != null and ip!=-1">
+                and ip=#{ip}
+            </if>
+            <if test="port != null and port!=-1">
+                and port=#{port}
+            </if>
+            <if test="website != null and website!=-1">
+                and website=#{website}
+            </if>
+            <if test="creatdTime != null and creatdTime!=-1">
+                and creatdTime=#{creatdTime}
+            </if>
+            <if test="updatedTime != null and updatedTime!=-1">
+                and updatedTime=#{updatedTime}
+            </if>
+            <if test="testCheck != null and testCheck!=-1">
+                and testCheck=#{testCheck}
+            </if>
+            <if test="testSelect != null and testSelect!=-1">
+                and testSelect=#{testSelect}
+            </if>
+            <if test="status != null and status!=-1">
+                and status=#{status}
+            </if>
+        </trim>
+    </select>
+
+    <insert id="insertProxyIp" parameterType="cn.kgc.beans.ProxyIp">
+        insert into proxy_ip(
+                        ip,
+                        port,
+                        website,
+                        creatdTime,
+                        updatedTime,
+                        testCheck,
+                        testSelect,
+                        status)
+        values(
+                     #{ip},
+                     #{port},
+                     #{website},
+                     #{creatdTime},
+                     #{updatedTime},
+                     #{testCheck},
+                     #{testSelect},
+                    #{status})
+    </insert>
+
+    <update id="updateProxyIp" parameterType="cn.kgc.beans.ProxyIp">
+        update proxy_ip
+        <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+                        <if test="ip != null and ip!='-1'">
+                            ip=#{ip},
+                        </if>
+                        <if test="port != null and port!='-1'">
+                            port=#{port},
+                        </if>
+                        <if test="website != null and website!='-1'">
+                            website=#{website},
+                        </if>
+                        <if test="creatdTime != null and creatdTime!='-1'">
+                            creatdTime=#{creatdTime},
+                        </if>
+                        <if test="updatedTime != null and updatedTime!='-1'">
+                            updatedTime=#{updatedTime},
+                        </if>
+                        <if test="testCheck != null and testCheck!='-1'">
+                            testCheck=#{testCheck},
+                        </if>
+                        <if test="testSelect != null and testSelect!='-1'">
+                            testSelect=#{testSelect},
+                        </if>
+                        <if test="status != null and status!='-1'">
+                            status=#{status}
+                        </if>
+        </trim>
+    </update>
+
+    <delete id="deleteProxyIpById" parameterType="Long">
+        delete from proxy_ip where id = #{id}
+    </delete>
+
+    <delete id="batchDeleteProxyIp" parameterType="java.util.Map">
+        delete from proxy_ip where id in (
+            <foreach collection="ids" item="id" separator=",">
+                    #{id}
+            </foreach>
+        )
+    </delete>
+</mapper>

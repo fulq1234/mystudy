@@ -60,4 +60,8 @@ public class ProxyUtilsFree {
 		
 	}
 	
+	public static void main(String[] args) {
+		ProxyUtilsFree free = new ProxyUtilsFree();
+		free.getProxyIp();
+	}
 }

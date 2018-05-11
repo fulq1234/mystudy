@@ -31,3 +31,142 @@ OGNL访问值栈
 年龄：<s:property value="user.age"  /><br/>
 国家：<s:property value="user.address.country" />
 </body>
+
+OGNL表达式
+访问JavaBean
+访问列表，数组
+访问Map
+
+注意事项
+访问Bean属性
+  Bean的类型必须遵循JavaBean的规范
+     必须具有无参构造
+  setter/getter方法符合JavaBean规范
+访问集合对象
+  可以使用属性名[index]的方式访问
+     列表，数组
+  可以使用属性名[key]的方式访问
+     Map对象
+  使用size或者length获取集合长度
+
+1.访问JavaBean
+  public class Address{
+	private String country;//国家
+	... //省略各个属性的setter和getter方法
+  }
+
+  public class User{//用户类
+	private String name;
+	private Address address;//家庭地址
+	... //省略各个属性的setter和getter方法
+  }
+(1).User对象作为Action的属性，其键名为user
+(2).访问name属性，访问country属性
+(3).user.name
+    user.address.country
+
+定义列表
+<s:set name="list" value="{'jason','tom','jack'}"/>
+访问列表
+<s:property value="#list[0]"/>
+<s:property value="#list.size"/>
+
+<s:set>标签将一个值赋给指定范围的变量
+<s:property>标签用于输出指定对象的属性值
+
+遍历集合
+<s:iterator value="list">
+	<s:property/>
+</s:iterator>
+
+定义Map
+#{key1:value1,key2:value2,key3:value3,...,keyN:valueN}
+举例:
+<s:set name="map" value="#{'cn':'China','us':'the United States','fr':'France','jp':'Japan'}"/>
+访问Map
+访问已创建的Map,对象名为map
+访问“China”
+#map["cn"]
+#map.cn
+
+ActionContext的结构
+1.值栈
+2.非值栈对象
+ActionContext中非值栈对象的访问
+1.request
+2.session
+3.application
+4.attr
+5.parameters
+6.自定义的非值栈对象。
+
+el表达式是${sessionScope.loginUser}
+ognl表达式是<s:property value="#session.loginUser"/>
+
+ValueStack与request,sesion,application,parameters均存储在ActionContext中
+ValueStack作为ActionContext的根对象。
+
+<s:set name="age" value="10" scope="request"/>
+<s:set name="username" value="'jason'" scope="session"/>
+<s:set name="count" value="5" scope="application"/>
+#request.age:<s:property value="#request.age"/><br/>
+#session.username:<s:property value="#session.username"/><br/>
+#application.count:<s:property value="#application.count"/><br/>
+#attr.count:<s:property value="#attr.count"/><br/>
+<s:set name="country1" value="China"/>
+<s:set name="country2" value="China"/>
+#country1:<s:property value="#country1"/><br/>
+#country2:<s:property value="#country2"/><br/>
+#request.country2:<s:property value="#request.country2"/><br/>
+
+<s:iterator value="users1">
+	<s:property/>
+</s:iterator>
+<s:iterator value="users2">
+	<s:property value="name"/>
+</s:iterator>
+
+<s:iterator value="users1" id="user"><!--使用了id，相当于用setter方法，把user变量set到上下文-->
+	<s:property value="user"/>
+</s:iterator>
+<s:iterator value="users2" id="user">
+	<s:property value="#user.name"/>
+</s:iterator>
+
+struts2标签的属性类型
+1.对象类型：属性值作为OGNL表达式进行计算
+<s:set name="myurl" value="'http://www.xxx.com'"/>
+<s:property value="#myurl"/><!--显示http://www.xxx.com-->
+2.字符串类型：属性值将直接输出，应使用%{... ...}再次计算。如URL标签
+<s:set name="myurl" value="'http://www.xxx.com'"/>
+<s:url value="#myurl"/><!--显示#myurl-->
+<s:url value="%{#myurl}"/><!--显示http://www.xxx.com-->
+
+URL标签
+<s:url value="url">
+   <s:param name="parname" value="parvalue"/>
+</s:url/>
+
+value属性：表示指定生成URL的地址
+<s:param/>表示需要传递的参数信息
+  name属性：表示传递的参数名称
+  value属性：表示传递参数所具有的值.
+
+日期标签
+<s:date format="format" nice="true|false" name="name" id="id">
+   ... ...
+</s:date>
+format属性：指定格式进行日期格式化
+nice属性：该属性只有true和false两个值，用于指定是否输出指定日期与当前时间的时差，默认是false
+name属性：表示当前需要的格式化的日期
+id属性：表示引用该元素的id值
+
+
+SSH架构
+1.Struts2 + Spring + Hibernate
+2.以Spring作为核心框架，数据持久化使用Hibernate完成，表现层使用Struts2
+3.Spring提供对象关联，面向切面编程等实用功能
+4.通过Spring提供的服务简化编码，减低难度。
+
+
+  

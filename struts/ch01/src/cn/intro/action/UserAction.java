@@ -1,8 +1,11 @@
 package cn.intro.action;
 
+import java.util.Date;
+
 public class UserAction{	
 	private String id = "";
 	private String message = "";
+	private Date timeDate;
 	public String getId() {
 		return id;
 	}

@@ -34,7 +34,7 @@ public class ZhiLianController {
 		String url = "http://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E9%80%89%E6%8B%A9%E5%9C%B0%E5%8C%BA&kw=java&isadv=0&sg=172c6d7dcafe4755ad7cec36bd1d3683&p=temp";
 		
 		//创建一个定长线程池，可控制线程最大并发数，超过的线程会在队列中等待。
-		ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
+		ExecutorService fixedThreadPool = Executors.newFixedThreadPool(50);
 		for(int pageii = 0;pageii<50;pageii++){//爬几页
 			final String listUrl = url.replaceAll("temp", (pageii+1) + "");
 			fixedThreadPool.execute(new Runnable(){
